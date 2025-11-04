@@ -18,9 +18,9 @@ const CompanyDetail = ({ user }) => {
   };
 
   const getScoreColor = (score) => {
-    if (score >= 80) return 'text-green-600 bg-green-50';
-    if (score >= 60) return 'text-yellow-600 bg-yellow-50';
-    return 'text-red-600 bg-red-50';
+    if (score >= 80) return 'text-green-400 bg-green-900/20 border-green-500/30';
+    if (score >= 60) return 'text-yellow-400 bg-yellow-900/20 border-yellow-500/30';
+    return 'text-red-400 bg-red-900/20 border-red-500/30';
   };
 
   return (
@@ -35,64 +35,83 @@ const CompanyDetail = ({ user }) => {
         </div>
 
         {/* Company Header */}
-        <div className="bg-dark-card rounded-xl border border-dark-border p-8 mb-8">
+        <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 mb-8 shadow-2xl">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-6">
-              <div className="w-16 h-16 bg-lemon-green rounded-lg flex items-center justify-center">
-                <span className="text-2xl font-bold text-black">
+              <div className="w-20 h-20 bg-gradient-to-br from-brand-green to-brand-blue rounded-2xl flex items-center justify-center shadow-lg">
+                <span className="text-3xl font-bold text-white">
                   {company.name.charAt(0)}
                 </span>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-dark-text">{company.name}</h2>
-                <p className="text-dark-text-secondary">{company.website} • {company.industry}</p>
+                <h2 className="text-3xl font-bold gradient-text">{company.name}</h2>
+                <p className="text-dark-text-secondary text-lg">{company.website} • {company.industry}</p>
                 <p className="text-sm text-dark-text-secondary">Member since Jan 2025</p>
               </div>
             </div>
             <div className="flex gap-3">
-              <button className="px-4 py-2 bg-transparent text-brand-green border border-brand-green rounded-lg hover:bg-brand-green hover:text-black transition-colors">Edit Info</button>
-              <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">Delete Company</button>
+              <Link to="/policy-upload" className="px-6 py-3 bg-transparent text-brand-green border border-brand-green rounded-xl hover:bg-brand-green hover:text-white transition-all duration-300 font-semibold">Upload Policy</Link>
+              <Link to="/dsr-management" className="px-6 py-3 bg-gradient-to-r from-brand-green to-brand-blue text-white rounded-xl hover:shadow-glow transition-all duration-300 font-semibold">Manage DSRs</Link>
             </div>
           </div>
         </div>
 
         {/* Compliance Overview */}
-        <div className="bg-dark-card rounded-xl border border-dark-border p-8 mb-8">
-          <h3 className="text-xl font-semibold mb-6 text-dark-text">Compliance Overview</h3>
+        <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 mb-8 shadow-2xl">
+          <h3 className="text-2xl font-bold gradient-text mb-8">Compliance Overview</h3>
           <div className="flex items-center gap-8">
-            <div className={`w-32 h-32 rounded-full flex flex-col items-center justify-center ${getScoreColor(company.complianceScore)}`}>
-              <span className="text-3xl font-bold">{company.complianceScore}</span>
-              <span className="text-sm">/100</span>
+            <div className="relative">
+              <div className="w-32 h-32 rounded-full border-8 border-dark-surface flex items-center justify-center relative">
+                <div className={`absolute inset-0 rounded-full border-8 ${
+                  company.complianceScore >= 80 ? 'border-success' : company.complianceScore >= 60 ? 'border-warning' : 'border-error'
+                }`} style={{
+                  background: `conic-gradient(${company.complianceScore >= 80 ? '#10B981' : company.complianceScore >= 60 ? '#F59E0B' : '#EF4444'} ${company.complianceScore * 3.6}deg, transparent 0deg)`
+                }}></div>
+                <div className="text-center z-10 bg-dark-bg rounded-full w-24 h-24 flex flex-col items-center justify-center">
+                  <span className={`text-3xl font-bold ${company.complianceScore >= 80 ? 'text-success' : company.complianceScore >= 60 ? 'text-warning' : 'text-error'}`}>{company.complianceScore}</span>
+                  <span className="text-dark-text-secondary text-sm">/100</span>
+                </div>
+              </div>
             </div>
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-3 mb-4">
                 {company.complianceScore >= 80 ? 
-                  <CheckCircle className="h-6 w-6 text-green-500" /> :
-                  <AlertTriangle className="h-6 w-6 text-yellow-500" />
+                  <CheckCircle className="h-8 w-8 text-success" /> :
+                  <AlertTriangle className="h-8 w-8 text-warning" />
                 }
-                <span className="text-xl font-semibold text-dark-text">
-                  {company.complianceScore >= 80 ? 'Fully Compliant' : 'Needs Attention'}
+                <span className={`text-2xl font-bold ${
+                  company.complianceScore >= 80 ? 'text-success' : company.complianceScore >= 60 ? 'text-warning' : 'text-error'
+                }`}>
+                  {company.complianceScore >= 80 ? 'Fully Compliant' : company.complianceScore >= 60 ? 'Moderate Risk' : 'High Risk'}
                 </span>
               </div>
-              <p className="text-dark-text-secondary mb-4">Last scan: {company.lastScan}</p>
-              <button className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green text-black rounded-lg hover:bg-lemon-green transition-colors">
-                <Eye className="h-4 w-4" />
-                Scan Again
-              </button>
+              <p className="text-dark-text-secondary mb-6 text-lg">Last scan: {company.lastScan}</p>
+              <div className="flex gap-3">
+                <Link to="/policy-upload" className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-brand-green to-brand-blue text-white rounded-xl hover:shadow-glow transition-all duration-300 font-semibold">
+                  <Eye className="h-5 w-5" />
+                  Rescan Policy
+                </Link>
+                <Link to="/remediation" className="inline-flex items-center gap-2 px-6 py-3 bg-transparent text-brand-green border border-brand-green rounded-xl hover:bg-brand-green hover:text-white transition-all duration-300 font-semibold">
+                  Fix Issues
+                </Link>
+              </div>
             </div>
           </div>
-          <div className="mt-6 flex gap-6">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              <span className="text-sm text-dark-text">7 checks passed</span>
+          <div className="mt-8 grid grid-cols-3 gap-6">
+            <div className="text-center p-4 bg-success/10 rounded-xl border border-success/30">
+              <CheckCircle className="h-8 w-8 text-success mx-auto mb-2" />
+              <div className="text-2xl font-bold text-success">7</div>
+              <div className="text-success text-sm">Checks Passed</div>
             </div>
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-yellow-500" />
-              <span className="text-sm text-dark-text">2 warnings</span>
+            <div className="text-center p-4 bg-warning/10 rounded-xl border border-warning/30">
+              <AlertTriangle className="h-8 w-8 text-warning mx-auto mb-2" />
+              <div className="text-2xl font-bold text-warning">2</div>
+              <div className="text-warning text-sm">Warnings</div>
             </div>
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-500" />
-              <span className="text-sm text-dark-text">3 critical</span>
+            <div className="text-center p-4 bg-error/10 rounded-xl border border-error/30">
+              <AlertTriangle className="h-8 w-8 text-error mx-auto mb-2" />
+              <div className="text-2xl font-bold text-error">3</div>
+              <div className="text-error text-sm">Critical Issues</div>
             </div>
           </div>
         </div>
@@ -101,39 +120,39 @@ const CompanyDetail = ({ user }) => {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Violations & Fixes */}
-            <div className="bg-dark-card rounded-xl border border-dark-border">
-              <div className="p-6 border-b border-dark-border">
-                <h3 className="text-xl font-semibold text-dark-text">Violations & Fixes</h3>
+            <div className="glass-effect rounded-2xl border border-dark-border/30 shadow-2xl">
+              <div className="p-8 border-b border-dark-border/30">
+                <h3 className="text-2xl font-bold gradient-text">Violations & Fixes</h3>
                 <div className="flex gap-4 mt-4">
-                  <button className="px-4 py-2 bg-red-50 text-red-600 rounded-lg font-medium">
+                  <button className="px-4 py-2 bg-red-900/20 text-red-400 border border-red-500/30 rounded-lg font-medium">
                     ❌ Critical (2)
                   </button>
-                  <button className="px-4 py-2 bg-yellow-50 text-yellow-600 rounded-lg font-medium">
+                  <button className="px-4 py-2 bg-yellow-900/20 text-yellow-400 border border-yellow-500/30 rounded-lg font-medium">
                     ⚠️ Warnings (1)
                   </button>
-                  <button className="px-4 py-2 bg-green-50 text-green-600 rounded-lg font-medium">
+                  <button className="px-4 py-2 bg-green-900/20 text-green-400 border border-green-500/30 rounded-lg font-medium">
                     ✅ Passed (7)
                   </button>
                 </div>
               </div>
               <div className="p-6 space-y-6">
                 {company.violations.map((violation) => (
-                  <div key={violation.id} className="border border-red-200 rounded-lg p-6 bg-red-50">
+                  <div key={violation.id} className="border border-red-500/30 rounded-lg p-6 bg-red-900/10">
                     <div className="flex items-start gap-3 mb-4">
                       {getViolationIcon(violation.type)}
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 mb-1">{violation.title}</h4>
-                        <p className="text-sm text-gray-600 mb-2">📖 Violates: {violation.article}</p>
+                        <h4 className="font-semibold text-dark-text mb-1">{violation.title}</h4>
+                        <p className="text-sm text-dark-text-secondary mb-2">📖 Violates: {violation.article}</p>
                       </div>
                     </div>
                     
                     <div className="mb-4">
-                      <h5 className="font-medium text-gray-900 mb-2">💬 What this means:</h5>
-                      <p className="text-sm text-gray-700 mb-4">{violation.description}</p>
+                      <h5 className="font-medium text-dark-text mb-2">💬 What this means:</h5>
+                      <p className="text-sm text-dark-text-secondary mb-4">{violation.description}</p>
                       
-                      <h5 className="font-medium text-gray-900 mb-2">🤖 AI Recommendation:</h5>
-                      <div className="bg-white border border-gray-200 rounded-lg p-4">
-                        <p className="text-sm text-gray-700">{violation.recommendation}</p>
+                      <h5 className="font-medium text-dark-text mb-2">🤖 AI Recommendation:</h5>
+                      <div className="bg-dark-bg border border-dark-border rounded-lg p-4">
+                        <p className="text-sm text-dark-text-secondary">{violation.recommendation}</p>
                         <div className="flex gap-2 mt-3">
                           <button className="px-4 py-2 bg-brand-green text-black rounded-lg hover:bg-lemon-green transition-colors text-sm">Copy Text</button>
                           <button className="px-4 py-2 bg-transparent text-brand-green border border-brand-green rounded-lg hover:bg-brand-green hover:text-black transition-colors text-sm">Customize</button>
@@ -151,9 +170,9 @@ const CompanyDetail = ({ user }) => {
             </div>
 
             {/* Citizens & Data Requests */}
-            <div className="bg-dark-card rounded-xl border border-dark-border">
-              <div className="p-6 border-b border-dark-border">
-                <h3 className="text-xl font-semibold mb-4 text-dark-text">Citizens & Data Requests</h3>
+            <div className="glass-effect rounded-2xl border border-dark-border/30 shadow-2xl">
+              <div className="p-8 border-b border-dark-border/30">
+                <h3 className="text-2xl font-bold gradient-text mb-6">Citizens & Data Requests</h3>
                 <div className="grid grid-cols-3 gap-4 text-sm">
                   <div>
                     <p className="text-2xl font-bold text-dark-text">{company.connectedUsers.toLocaleString()}</p>
@@ -207,8 +226,8 @@ const CompanyDetail = ({ user }) => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Privacy Policy */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-              <h3 className="text-lg font-semibold mb-4 text-dark-text">Privacy Policy</h3>
+            <div className="glass-effect rounded-xl border border-dark-border/30 p-6 shadow-lg">
+              <h3 className="text-xl font-bold gradient-text mb-6">Privacy Policy</h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <FileText className="h-5 w-5 text-dark-text-secondary" />
@@ -225,8 +244,8 @@ const CompanyDetail = ({ user }) => {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-              <h3 className="text-lg font-semibold mb-4 text-dark-text">Quick Actions</h3>
+            <div className="glass-effect rounded-xl border border-dark-border/30 p-6 shadow-lg">
+              <h3 className="text-xl font-bold gradient-text mb-6">Quick Actions</h3>
               <div className="space-y-3">
                 <button className="w-full flex items-center gap-3 p-3 bg-dark-bg border border-dark-border rounded-lg text-dark-text hover:border-brand-green hover:bg-lemon-green hover:text-black transition-all duration-200 text-sm">
                   <Download className="h-4 w-4 text-brand-green" />
@@ -248,8 +267,8 @@ const CompanyDetail = ({ user }) => {
             </div>
 
             {/* Audit Trail */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-              <h3 className="text-lg font-semibold mb-4 text-dark-text">Recent Actions</h3>
+            <div className="glass-effect rounded-xl border border-dark-border/30 p-6 shadow-lg">
+              <h3 className="text-xl font-bold gradient-text mb-6">Recent Actions</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-brand-green rounded-full mt-2"></div>

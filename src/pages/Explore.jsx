@@ -38,7 +38,8 @@ const Explore = ({ user }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-dark-text mb-4">Explore Companies & Compliance</h1>
+          <h1 className="text-4xl font-bold gradient-text mb-4">Explore Companies & Compliance</h1>
+          <p className="text-dark-text-secondary mb-6">Discover how Nigerian companies rank in NDPR compliance</p>
           <div className="max-w-2xl mx-auto">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-dark-text-secondary" />
@@ -47,7 +48,7 @@ const Explore = ({ user }) => {
                 placeholder="Search companies, industries, regulations..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-dark-card border border-dark-border text-dark-text rounded-xl focus:ring-2 focus:ring-brand-green focus:border-transparent"
+                className="w-full pl-12 pr-4 py-3 bg-dark-surface border border-dark-border text-dark-text rounded-xl focus:border-brand-green focus:outline-none"
               />
             </div>
           </div>
@@ -55,43 +56,43 @@ const Explore = ({ user }) => {
 
         {/* Tabs */}
         <div className="flex justify-center mb-8">
-          <div className="bg-dark-card rounded-xl p-1 border border-dark-border">
+          <div className="glass-effect rounded-xl p-1 border border-dark-border/30">
             <button
               onClick={() => setActiveTab('leaderboard')}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
                 activeTab === 'leaderboard' 
-                  ? 'bg-brand-green text-black' 
-                  : 'text-dark-text-secondary hover:text-dark-text'
+                  ? 'bg-gradient-to-r from-brand-green to-brand-blue text-white shadow-glow' 
+                  : 'text-dark-text-secondary hover:text-brand-green'
               }`}
             >
               🏆 Leaderboard
             </button>
             <button
               onClick={() => setActiveTab('industry')}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
                 activeTab === 'industry' 
-                  ? 'bg-brand-green text-black' 
-                  : 'text-dark-text-secondary hover:text-dark-text'
+                  ? 'bg-gradient-to-r from-brand-green to-brand-blue text-white shadow-glow' 
+                  : 'text-dark-text-secondary hover:text-brand-green'
               }`}
             >
               📊 By Industry
             </button>
             <button
               onClick={() => setActiveTab('map')}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
                 activeTab === 'map' 
-                  ? 'bg-brand-green text-black' 
-                  : 'text-dark-text-secondary hover:text-dark-text'
+                  ? 'bg-gradient-to-r from-brand-green to-brand-blue text-white shadow-glow' 
+                  : 'text-dark-text-secondary hover:text-brand-green'
               }`}
             >
               🗺️ Map View
             </button>
             <button
               onClick={() => setActiveTab('stats')}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
                 activeTab === 'stats' 
-                  ? 'bg-brand-green text-black' 
-                  : 'text-dark-text-secondary hover:text-dark-text'
+                  ? 'bg-gradient-to-r from-brand-green to-brand-blue text-white shadow-glow' 
+                  : 'text-dark-text-secondary hover:text-brand-green'
               }`}
             >
               📈 Stats
@@ -102,16 +103,16 @@ const Explore = ({ user }) => {
         {activeTab === 'leaderboard' && (
           <div className="space-y-8">
             {/* Filters */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
+            <div className="glass-effect rounded-xl border border-dark-border/30 p-6 mb-8">
               <div className="flex flex-wrap gap-4 items-center">
                 <div className="flex items-center gap-2">
-                  <Filter className="h-5 w-5 text-dark-text-secondary" />
-                  <span className="font-medium text-dark-text">Filter:</span>
+                  <Filter className="h-5 w-5 text-brand-green" />
+                  <span className="font-semibold text-dark-text">Filter:</span>
                 </div>
                 <select 
                   value={selectedIndustry}
                   onChange={(e) => setSelectedIndustry(e.target.value)}
-                  className="bg-dark-bg border border-dark-border text-dark-text rounded-lg px-3 py-2"
+                  className="bg-dark-surface border border-dark-border text-dark-text rounded-xl px-4 py-2 focus:border-brand-green focus:outline-none"
                 >
                   <option>All Industries</option>
                   <option>Fintech</option>
@@ -119,13 +120,13 @@ const Explore = ({ user }) => {
                   <option>E-commerce</option>
                   <option>Healthcare</option>
                 </select>
-                <select className="bg-dark-bg border border-dark-border text-dark-text rounded-lg px-3 py-2">
+                <select className="bg-dark-surface border border-dark-border text-dark-text rounded-xl px-4 py-2 focus:border-brand-green focus:outline-none">
                   <option>All Locations</option>
                   <option>Lagos</option>
                   <option>Abuja</option>
                   <option>Port Harcourt</option>
                 </select>
-                <select className="bg-dark-bg border border-dark-border text-dark-text rounded-lg px-3 py-2">
+                <select className="bg-dark-surface border border-dark-border text-dark-text rounded-xl px-4 py-2 focus:border-brand-green focus:outline-none">
                   <option>Score: All</option>
                   <option>80-100 (Compliant)</option>
                   <option>60-79 (Warning)</option>
@@ -135,25 +136,34 @@ const Explore = ({ user }) => {
             </div>
 
             {/* Leaderboard */}
-            <div className="bg-dark-card rounded-xl border border-dark-border">
-              <div className="p-6 border-b border-dark-border">
-                <h2 className="text-2xl font-bold text-dark-text flex items-center gap-2">
-                  <Trophy className="h-6 w-6 text-yellow-500" />
+            <div className="glass-effect rounded-2xl border border-dark-border/30 shadow-2xl">
+              <div className="p-8 border-b border-dark-border/30">
+                <h2 className="text-3xl font-bold gradient-text flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl">
+                    <Trophy className="h-6 w-6 text-black" />
+                  </div>
                   Nigerian Compliance Leaderboard
                 </h2>
               </div>
               <div className="p-6">
                 <div className="space-y-6">
                   {filteredCompanies.map((company, index) => (
-                    <div key={company.id} className="border border-dark-border rounded-lg p-6 hover:border-brand-green transition-colors bg-dark-bg">
+                    <div key={company.id} className="bg-dark-surface/30 border border-dark-border/50 rounded-2xl p-6 hover:border-brand-green/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-6">
-                          <div className="text-3xl">{getMedalEmoji(index)}</div>
-                          <div className="w-16 h-16 bg-lemon-green rounded-lg flex items-center justify-center">
-                            <span className="font-bold text-black">{company.name.charAt(0)}</span>
+                          <div className={`flex items-center justify-center w-12 h-12 rounded-xl font-bold text-lg ${
+                            index === 0 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-black' :
+                            index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-500 text-black' :
+                            index === 2 ? 'bg-gradient-to-br from-amber-600 to-amber-800 text-white' :
+                            'bg-gradient-to-br from-dark-border to-dark-surface text-dark-text'
+                          }`}>
+                            {index + 1}
+                          </div>
+                          <div className="w-16 h-16 bg-gradient-to-br from-brand-green to-brand-blue rounded-2xl flex items-center justify-center shadow-lg">
+                            <span className="font-bold text-white text-xl">{company.name.charAt(0)}</span>
                           </div>
                           <div>
-                            <h3 className="text-xl font-semibold text-dark-text">{company.name}</h3>
+                            <h3 className="text-xl font-semibold text-dark-text group-hover:text-brand-green transition-colors">{company.name}</h3>
                             <p className="text-dark-text-secondary">{company.industry} • {company.location}</p>
                             <p className="text-sm text-dark-text-secondary">{company.connectedUsers.toLocaleString()} users connected</p>
                           </div>
@@ -161,20 +171,21 @@ const Explore = ({ user }) => {
                         
                         <div className="flex items-center gap-6">
                           <div className="text-right">
-                            <div className={`text-2xl font-bold ${getScoreColor(company.score)}`}>
-                              {company.score}/100
-                            </div>
-                            <div className="w-32 h-3 bg-dark-border rounded-full mt-2">
+                            <div className="font-bold text-2xl text-dark-text mb-2">{company.score}<span className="text-lg text-dark-text-secondary">/100</span></div>
+                            <div className="w-40 h-3 bg-dark-border rounded-full overflow-hidden">
                               <div 
-                                className={`h-full rounded-full ${
-                                  company.score >= 80 ? 'bg-green-500' : 
-                                  company.score >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+                                className={`h-full rounded-full transition-all duration-500 ${
+                                  company.score >= 80 ? 'bg-gradient-to-r from-success to-brand-green' : 
+                                  company.score >= 60 ? 'bg-gradient-to-r from-warning to-accent-orange' : 'bg-gradient-to-r from-error to-red-600'
                                 }`}
                                 style={{ width: `${company.score}%` }}
                               ></div>
                             </div>
                           </div>
-                          {getScoreIcon(company.score)}
+                          <CheckCircle className={`h-8 w-8 ${
+                            company.score >= 80 ? 'text-success' : 
+                            company.score >= 60 ? 'text-warning' : 'text-error'
+                          }`} />
                         </div>
                       </div>
                       
@@ -220,8 +231,8 @@ const Explore = ({ user }) => {
                       )}
                       
                       <div className="flex gap-3 mt-4">
-                        <button className="px-4 py-2 bg-transparent text-brand-green border border-brand-green rounded-lg hover:bg-brand-green hover:text-black transition-colors">View Profile</button>
-                        <button className="px-4 py-2 bg-brand-green text-black rounded-lg hover:bg-lemon-green transition-colors">I'm a Customer</button>
+                        <button className="px-6 py-3 bg-transparent text-brand-green border border-brand-green rounded-xl hover:bg-brand-green hover:text-white transition-all duration-300 font-semibold">View Profile</button>
+                        <button className="px-6 py-3 bg-gradient-to-r from-brand-green to-brand-blue text-white rounded-xl hover:shadow-glow transition-all duration-300 font-semibold">Connect Data</button>
                       </div>
                     </div>
                   ))}
@@ -234,8 +245,8 @@ const Explore = ({ user }) => {
         {activeTab === 'industry' && (
           <div className="space-y-8">
             {/* Industry Stats */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-              <h2 className="text-2xl font-bold text-dark-text mb-6">Average Compliance Score by Industry</h2>
+            <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 shadow-2xl">
+              <h2 className="text-3xl font-bold gradient-text mb-8">Average Compliance Score by Industry</h2>
               <div className="space-y-4">
                 {industryStats.map((industry) => (
                   <div key={industry.name} className="flex items-center justify-between py-3">
@@ -263,9 +274,11 @@ const Explore = ({ user }) => {
             </div>
 
             {/* Most Improved */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-              <h2 className="text-2xl font-bold text-dark-text mb-6 flex items-center gap-2">
-                <TrendingUp className="h-6 w-6 text-green-500" />
+            <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 shadow-2xl">
+              <h2 className="text-3xl font-bold text-dark-text mb-8 flex items-center gap-3">
+                <div className="p-2 bg-gradient-to-br from-success to-brand-green rounded-xl">
+                  <TrendingUp className="h-6 w-6 text-white" />
+                </div>
                 Most Improved This Month
               </h2>
               <div className="space-y-4">
@@ -307,8 +320,8 @@ const Explore = ({ user }) => {
         {activeTab === 'stats' && (
           <div className="space-y-8">
             {/* Platform Statistics */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-              <h2 className="text-2xl font-bold text-dark-text mb-6">Platform Statistics</h2>
+            <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 shadow-2xl">
+              <h2 className="text-3xl font-bold gradient-text mb-8">Platform Statistics</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-brand-green">{platformStats.totalCompanies.toLocaleString()}</div>
@@ -330,8 +343,8 @@ const Explore = ({ user }) => {
             </div>
 
             {/* Trends */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-              <h2 className="text-2xl font-bold text-dark-text mb-6">📈 Trends</h2>
+            <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 shadow-2xl">
+              <h2 className="text-3xl font-bold gradient-text mb-8">📈 Trends</h2>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <TrendingUp className="h-5 w-5 text-green-500" />
@@ -351,13 +364,20 @@ const Explore = ({ user }) => {
         )}
 
         {activeTab === 'map' && (
-          <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-            <h2 className="text-2xl font-bold text-dark-text mb-6 flex items-center gap-2">
-              <MapPin className="h-6 w-6" />
+          <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 shadow-2xl">
+            <h2 className="text-3xl font-bold gradient-text mb-8 flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-br from-brand-purple to-accent-orange rounded-xl">
+                <MapPin className="h-6 w-6 text-white" />
+              </div>
               Map View
             </h2>
-            <div className="h-96 bg-dark-bg rounded-lg flex items-center justify-center">
-              <p className="text-dark-text-secondary">Interactive map coming soon...</p>
+            <div className="h-96 bg-dark-surface/30 rounded-2xl flex items-center justify-center border border-dark-border/30">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-brand-green to-brand-blue rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <MapPin className="h-8 w-8 text-white" />
+                </div>
+                <p className="text-dark-text-secondary text-lg">Interactive map coming soon...</p>
+              </div>
             </div>
           </div>
         )}

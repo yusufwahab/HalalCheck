@@ -48,19 +48,19 @@ const RequestDetail = ({ user }) => {
           </div>
 
           {/* Request Header */}
-          <div className="bg-dark-card rounded-xl border border-dark-border p-8 mb-8">
+          <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 mb-8 shadow-2xl">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h1 className="text-2xl font-bold text-dark-text mb-2">
+                <h1 className="text-3xl font-bold gradient-text mb-4">
                   My Data Request to {request.companyName}
                 </h1>
-                <p className="text-dark-text-secondary">Request ID: #REQ-2025-{String(request.id).padStart(6, '0')}</p>
+                <p className="text-dark-text-secondary text-lg">Request ID: #REQ-2025-{String(request.id).padStart(6, '0')}</p>
               </div>
               <div className="text-center">
                 <div className={`px-4 py-2 rounded-full font-medium ${
                   response.status === 'completed' 
-                    ? 'bg-green-50 text-green-600' 
-                    : 'bg-yellow-50 text-yellow-600'
+                    ? 'bg-green-900/20 text-green-400 border border-green-500/30' 
+                    : 'bg-yellow-900/20 text-yellow-400 border border-yellow-500/30'
                 }`}>
                   {response.status === 'completed' ? '✅ Completed' : '⏳ Pending'}
                 </div>
@@ -77,8 +77,8 @@ const RequestDetail = ({ user }) => {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               {/* Request Details */}
-              <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-                <h2 className="text-xl font-semibold mb-4 text-dark-text">Request Details</h2>
+              <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 shadow-lg">
+                <h2 className="text-2xl font-bold gradient-text mb-6">Request Details</h2>
                 <div className="space-y-4">
                   <div>
                     <span className="font-medium text-dark-text">Type:</span> <span className="text-dark-text-secondary">📥 Data Access Request</span>
@@ -98,8 +98,8 @@ const RequestDetail = ({ user }) => {
               </div>
 
               {/* Progress Tracker */}
-              <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-                <h2 className="text-xl font-semibold mb-6 text-dark-text">Progress Tracker</h2>
+              <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 shadow-lg">
+                <h2 className="text-2xl font-bold gradient-text mb-8">Progress Tracker</h2>
                 <div className="space-y-4">
                   {timeline.map((item, index) => (
                     <div key={index} className="flex items-start gap-4">
@@ -118,8 +118,8 @@ const RequestDetail = ({ user }) => {
                 </div>
                 
                 {response.status === 'completed' && (
-                  <div className="mt-6 p-4 bg-green-50 rounded-lg">
-                    <p className="text-green-700 font-medium">
+                  <div className="mt-6 p-4 bg-green-900/20 border border-green-500/30 rounded-lg">
+                    <p className="text-green-400 font-medium">
                       ⏱️ Response time: {response.responseTime} (Excellent! 🎉)
                     </p>
                   </div>
@@ -128,8 +128,8 @@ const RequestDetail = ({ user }) => {
 
               {/* Company Response */}
               {response.status === 'completed' && (
-                <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-                  <h2 className="text-xl font-semibold mb-4 text-dark-text">Company Response</h2>
+                <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 shadow-lg">
+                  <h2 className="text-2xl font-bold gradient-text mb-6">Company Response</h2>
                   
                   <div className="mb-6">
                     <h3 className="font-medium mb-3 text-dark-text">Message from {request.companyName}:</h3>
@@ -186,8 +186,8 @@ const RequestDetail = ({ user }) => {
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Company Track Record */}
-              <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-                <h3 className="text-lg font-semibold mb-4 text-dark-text">Company Track Record</h3>
+              <div className="glass-effect rounded-xl border border-dark-border/30 p-6 shadow-lg">
+                <h3 className="text-xl font-bold gradient-text mb-6">Company Track Record</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
                     <span className="text-dark-text-secondary">Typical response time:</span>
@@ -210,8 +210,8 @@ const RequestDetail = ({ user }) => {
               </div>
 
               {/* Your Actions */}
-              <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-                <h3 className="text-lg font-semibold mb-4 text-dark-text">Your Actions</h3>
+              <div className="glass-effect rounded-xl border border-dark-border/30 p-6 shadow-lg">
+                <h3 className="text-xl font-bold gradient-text mb-6">Your Actions</h3>
                 <div className="space-y-3">
                   {response.status !== 'completed' && (
                     <>
@@ -232,12 +232,12 @@ const RequestDetail = ({ user }) => {
                 </div>
 
                 {response.status !== 'completed' && (
-                  <div className="mt-4 p-4 bg-yellow-50 rounded-lg">
-                    <h4 className="font-medium text-sm text-yellow-700 mb-2">⚠️ What if they don't respond?</h4>
-                    <p className="text-sm text-yellow-700 mb-2">
+                  <div className="mt-4 p-4 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+                    <h4 className="font-medium text-sm text-yellow-400 mb-2">⚠️ What if they don't respond?</h4>
+                    <p className="text-sm text-yellow-400 mb-2">
                       If {request.companyName} doesn't respond by the deadline, we'll help you escalate this complaint to NITDA (the regulator).
                     </p>
-                    <button className="text-yellow-600 hover:text-yellow-700 text-sm font-medium">
+                    <button className="text-yellow-400 hover:text-yellow-300 text-sm font-medium">
                       Learn more about escalation →
                     </button>
                   </div>
@@ -272,7 +272,7 @@ const RequestDetail = ({ user }) => {
               <p className="text-dark-text-secondary">Request ID: #REQ-2025-{String(request.id).padStart(6, '0')}</p>
             </div>
             <div className="text-center">
-              <div className="px-4 py-2 rounded-full font-medium bg-yellow-50 text-yellow-600 mb-2">
+              <div className="px-4 py-2 rounded-full font-medium bg-yellow-900/20 text-yellow-400 border border-yellow-500/30 mb-2">
                 ⏳ PENDING • ⚠️ REQUIRES ACTION
               </div>
               <p className="text-sm text-dark-text-secondary">⏰ Deadline: {request.deadline}</p>
@@ -313,7 +313,7 @@ const RequestDetail = ({ user }) => {
                     </div>
                   </div>
                   <div className="mt-3">
-                    <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm">✅ Active Consent</span>
+                    <span className="px-3 py-1 bg-green-900/20 text-green-400 border border-green-500/30 rounded-full text-sm">✅ Active Consent</span>
                   </div>
                 </div>
               </div>
@@ -412,8 +412,8 @@ const RequestDetail = ({ user }) => {
                 <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">Decline</button>
               </div>
 
-              <div className="p-4 bg-yellow-50 rounded-lg">
-                <p className="text-sm text-yellow-700">
+              <div className="p-4 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+                <p className="text-sm text-yellow-400">
                   ⚠️ Note: Declining requires legal justification under NDPR Article 2.1(h). 
                   Unjustified refusal may result in penalties up to ₦10 million.
                 </p>

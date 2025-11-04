@@ -1,100 +1,57 @@
-import { Link, useLocation } from 'react-router-dom';
-import { Bell, User, Search, Shield } from 'lucide-react';
+import { Bell, Search, Menu } from 'lucide-react';
 import { useState } from 'react';
 
-const Navbar = ({ user }) => {
-  const location = useLocation();
+const Navbar = ({ user, onToggleSidebar, sidebarOpen }) => {
   const [notifications] = useState(3);
 
-  const isActive = (path) => location.pathname === path;
-
   return (
-    <nav className="bg-dark-card border-b border-dark-border sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className={`glass-effect border-b border-gray-200 sticky top-0 z-30 backdrop-blur-xl transition-all duration-300 ${
+      sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'
+    }`}>
+      <div className="px-6">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <Shield className="h-8 w-8 text-primary-500" />
-            <span className="text-xl font-bold text-dark-text">TrustBridge</span>
-          </Link>
+          {/* Left side - Menu button and Search */}
+          <div className="flex items-center gap-4 flex-1">
+            {/* Mobile menu button */}
+            <button 
+              onClick={onToggleSidebar}
+              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 lg:hidden"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+            
+            {/* Desktop toggle button */}
+            <button 
+              onClick={onToggleSidebar}
+              className="hidden lg:block p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
 
-          {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link 
-              to="/dashboard" 
-              className={`px-3 py-2 text-sm font-medium transition-colors ${
-                isActive('/dashboard') 
-                  ? 'text-brand-green border-b-2 border-brand-green' 
-                  : 'text-dark-text-secondary hover:text-dark-text'
-              }`}
-            >
-              Dashboard
-            </Link>
-            <Link 
-              to="/explore" 
-              className={`px-3 py-2 text-sm font-medium transition-colors ${
-                isActive('/explore') 
-                  ? 'text-brand-green border-b-2 border-brand-green' 
-                  : 'text-dark-text-secondary hover:text-dark-text'
-              }`}
-            >
-              Explore
-            </Link>
-            <Link 
-              to="/resources" 
-              className={`px-3 py-2 text-sm font-medium transition-colors ${
-                isActive('/resources') 
-                  ? 'text-brand-green border-b-2 border-brand-green' 
-                  : 'text-dark-text-secondary hover:text-dark-text'
-              }`}
-            >
-              Resources
-            </Link>
-            <Link 
-              to="/profile" 
-              className={`px-3 py-2 text-sm font-medium transition-colors ${
-                isActive('/profile') 
-                  ? 'text-brand-green border-b-2 border-brand-green' 
-                  : 'text-dark-text-secondary hover:text-dark-text'
-              }`}
-            >
-              Profile
-            </Link>
-          </div>
-
-          {/* Search Bar */}
-          <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-dark-text-secondary" />
-              <input
-                type="text"
-                placeholder="Search companies, regulations..."
-                className="w-full pl-10 pr-4 py-2 bg-dark-bg border border-dark-border text-dark-text rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent"
-              />
+            {/* Search Bar */}
+            <div className="flex items-center flex-1 max-w-md">
+              <div className="relative w-full">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search companies, regulations..."
+                  className="w-full pl-12 pr-6 py-3 bg-gray-50 border-2 border-gray-200 text-gray-900 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all duration-200"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Right side icons */}
+          {/* Right side - Notifications only */}
           <div className="flex items-center gap-4">
             {/* Notifications */}
-            <button className="relative p-2 text-dark-text-secondary hover:text-dark-text">
+            <button className="relative p-3 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all duration-200">
               <Bell className="h-6 w-6" />
               {notifications > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 h-6 w-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-pulse">
                   {notifications}
                 </span>
               )}
             </button>
-
-            {/* User Avatar */}
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-brand-green rounded-full flex items-center justify-center">
-                <User className="h-5 w-5 text-black" />
-              </div>
-              <span className="hidden md:block text-sm font-medium text-dark-text">
-                {user.name}
-              </span>
-            </div>
           </div>
         </div>
       </div>

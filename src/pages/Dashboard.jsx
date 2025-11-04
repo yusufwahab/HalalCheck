@@ -1,329 +1,331 @@
 import { Link } from 'react-router-dom';
-import { Plus, Eye, Scan, AlertTriangle, CheckCircle, Clock, Building2, Shield, Users, FileText, TrendingUp, Zap } from 'lucide-react';
-import { companies, dataConnections, activities } from '../data/mockData';
+import { Upload, Award, Shield, AlertTriangle, CheckCircle, Clock, FileText, Building2, TrendingUp, Users, Zap, Eye } from 'lucide-react';
 
 const Dashboard = ({ user }) => {
-  const userCompanies = companies.filter(c => c.ownerId === user.id);
-  const userDataConnections = dataConnections.filter(d => d.userId === user.id);
-  
-  const totalRequests = userCompanies.reduce((sum, company) => sum + company.pendingRequests, 0);
-  const avgScore = Math.round(userCompanies.reduce((sum, company) => sum + company.complianceScore, 0) / userCompanies.length) || 0;
-  const totalConnected = userDataConnections.length;
-
-  const getScoreColor = (score) => {
-    if (score >= 80) return 'text-brand-green bg-brand-green/20 border-brand-green/30';
-    if (score >= 60) return 'text-yellow-500 bg-yellow-500/20 border-yellow-500/30';
-    return 'text-red-500 bg-red-500/20 border-red-500/30';
-  };
-
-  const getStatusIcon = (score) => {
-    if (score >= 80) return <CheckCircle className="h-5 w-5 text-brand-green" />;
-    if (score >= 60) return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-    return <AlertTriangle className="h-5 w-5 text-red-500" />;
-  };
-
-  const getActivityIcon = (activity) => {
-    const iconMap = {
-      success: '✅',
-      warning: '⚠️',
-      info: 'ℹ️',
-      danger: '❌'
-    };
-    return iconMap[activity.status] || activity.icon;
-  };
+  const complianceScore = 78;
+  const pendingRequests = 3;
+  const totalCompanies = 2;
+  const certificateStatus = 'Active';
 
   return (
-    <div className="min-h-screen bg-dark-bg">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 ml-64">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-dark-text">👋 Welcome back, <span className="text-brand-green">{user.name}</span>!</h1>
-          <p className="text-dark-text-secondary mt-1">Saturday, November 01, 2025</p>
+        <div className="mb-12">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-5xl font-black text-gray-900 mb-3">
+                Welcome back, <span className="text-blue-600">{user.name}</span>
+              </h1>
+              <p className="text-xl text-gray-600">Manage your <span className="text-blue-600 font-semibold">NDPR compliance</span> and data protection requirements</p>
+            </div>
+            <div className="hidden lg:block">
+              <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center floating">
+                <Shield className="h-16 w-16 text-white" />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-dark-card border border-dark-border rounded-xl p-6 transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-2xl font-bold text-dark-text">{userCompanies.length}</p>
-                <p className="text-sm text-dark-text-secondary">Companies</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-4 bg-blue-600 rounded-2xl">
+                <Shield className="h-8 w-8 text-white" />
               </div>
-              <Building2 className="h-8 w-8 text-brand-green" />
+              <div className="text-right">
+                <div className="text-4xl font-black text-gray-900">{complianceScore}%</div>
+                <div className="text-sm font-semibold text-blue-600">Compliance Score</div>
+              </div>
+            </div>
+            <div className="w-full bg-blue-200 rounded-full h-3">
+              <div 
+                className="bg-blue-600 h-3 rounded-full transition-all duration-1000" 
+                style={{ width: `${complianceScore}%` }}
+              ></div>
             </div>
           </div>
-          <div className="bg-dark-card border border-dark-border rounded-xl p-6 transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-2xl font-bold text-dark-text">{avgScore}%</p>
-                <p className="text-sm text-dark-text-secondary">Avg Score</p>
+          
+          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-4 bg-blue-600 rounded-2xl">
+                <Building2 className="h-8 w-8 text-white" />
               </div>
-              <Shield className="h-8 w-8 text-brand-green" />
+              <div className="text-right">
+                <div className="text-4xl font-black text-gray-900">{totalCompanies}</div>
+                <div className="text-sm font-semibold text-blue-600">Connected Companies</div>
+              </div>
+            </div>
+            <div className="flex items-center text-sm text-blue-600 font-medium">
+              <TrendingUp className="h-4 w-4 mr-1" />
+              +2 this month
             </div>
           </div>
-          <div className="bg-dark-card border border-dark-border rounded-xl p-6 transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-2xl font-bold text-dark-text">{totalRequests}</p>
-                <p className="text-sm text-dark-text-secondary">Requests</p>
+
+          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-4 bg-blue-600 rounded-2xl">
+                <Clock className="h-8 w-8 text-white" />
               </div>
-              <FileText className="h-8 w-8 text-yellow-500" />
+              <div className="text-right">
+                <div className="text-4xl font-black text-gray-900">{pendingRequests}</div>
+                <div className="text-sm font-semibold text-blue-600">Pending Requests</div>
+              </div>
+            </div>
+            <div className="flex items-center text-sm text-blue-600 font-medium">
+              <Clock className="h-4 w-4 mr-1" />
+              2 due today
             </div>
           </div>
-          <div className="bg-dark-card border border-dark-border rounded-xl p-6 transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-2xl font-bold text-dark-text">{totalConnected}</p>
-                <p className="text-sm text-dark-text-secondary">Connected</p>
+
+          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-4 bg-blue-600 rounded-2xl">
+                <Award className="h-8 w-8 text-white" />
               </div>
-              <Users className="h-8 w-8 text-brand-green" />
+              <div className="text-right">
+                <div className="text-2xl font-black text-gray-900">{certificateStatus}</div>
+                <div className="text-sm font-semibold text-blue-600">Certificate Status</div>
+              </div>
+            </div>
+            <div className="flex items-center text-sm text-blue-600 font-medium">
+              <CheckCircle className="h-4 w-4 mr-1" />
+              Valid until Dec 2025
             </div>
           </div>
         </div>
 
+        {/* Main Content Grid */}
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Content */}
+          {/* Left Column - Main Content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* My Companies */}
-            <div className="bg-dark-card border border-dark-border rounded-xl">
-              <div className="p-6 border-b border-dark-border">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold text-dark-text flex items-center gap-2">
-                    <Building2 className="h-5 w-5 text-brand-green" />
-                    MY <span className="text-brand-green">COMPANIES</span>
-                  </h2>
-                  <Link to="/company/new" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green text-black rounded-xl font-bold hover:bg-lemon-green transition-all duration-200">
-                    <Plus className="h-4 w-4" />
-                    Register New Company
-                  </Link>
-                </div>
-              </div>
-              <div className="p-6 space-y-6">
-                {userCompanies.length === 0 ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-lemon-green rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <Building2 className="h-8 w-8 text-black" />
+            {/* Compliance Overview */}
+            <div className="premium-card rounded-3xl p-10">
+              <h2 className="text-3xl font-black text-gray-900 mb-8">
+                Compliance <span className="text-blue-600">Overview</span>
+              </h2>
+              
+              <div className="flex flex-col lg:flex-row items-center gap-10 mb-10">
+                <div className="relative">
+                  <div className="w-40 h-40 rounded-full border-8 border-gray-100 flex items-center justify-center relative">
+                    <div 
+                      className="absolute inset-0 rounded-full border-8 border-blue-500" 
+                      style={{
+                        background: `conic-gradient(#3b82f6 ${complianceScore * 3.6}deg, transparent 0deg)`
+                      }}
+                    ></div>
+                    <div className="text-center z-10 bg-white rounded-full w-32 h-32 flex flex-col items-center justify-center shadow-lg">
+                      <span className="text-4xl font-black text-blue-600">{complianceScore}</span>
+                      <span className="text-lg text-gray-500 font-semibold">/100</span>
                     </div>
-                    <h3 className="text-lg font-semibold text-dark-text mb-2">No Companies Yet</h3>
-                    <p className="text-dark-text-secondary mb-6">Register your first company to start managing NDPR compliance</p>
-                    <Link to="/company/new" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green text-black rounded-xl font-bold hover:bg-lemon-green transition-all duration-200">
-                      <Plus className="h-4 w-4" />
-                      Register Company
+                  </div>
+                </div>
+                
+                <div className="flex-1 text-center lg:text-left">
+                  <h3 className="text-2xl font-black text-blue-600 mb-3">Excellent Progress!</h3>
+                  <p className="text-gray-600 text-lg mb-6 leading-relaxed">Your compliance score is above average. Address the remaining issues to achieve full NDPR compliance.</p>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Link 
+                      to="/policy-upload" 
+                      className="px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
+                    >
+                      <Upload className="h-5 w-5" />
+                      Upload Policy
+                    </Link>
+                    <Link 
+                      to="/remediation" 
+                      className="px-8 py-4 bg-white border-2 border-blue-600 text-blue-600 rounded-2xl font-bold hover:bg-blue-600 hover:text-white transition-all duration-200 flex items-center justify-center gap-2"
+                    >
+                      <Zap className="h-5 w-5" />
+                      Fix Issues
                     </Link>
                   </div>
-                ) : (
-                  userCompanies.map((company) => (
-                    <div key={company.id} className="bg-dark-bg border border-dark-border rounded-lg p-6 hover:border-brand-green transition-all duration-200">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-lemon-green rounded-xl flex items-center justify-center text-2xl">
-                            {company.logo}
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-semibold text-dark-text">{company.name}</h3>
-                            <p className="text-sm text-dark-text-secondary">{company.website} • {company.industry}</p>
-                          </div>
-                        </div>
-                        <button className="text-dark-text-secondary hover:text-brand-green transition-colors">
-                          <span className="text-lg">•••</span>
-                        </button>
-                      </div>
-                      
-                      <div className="flex items-center gap-6 mb-4">
-                        <div className={`w-20 h-20 rounded-full border-2 flex flex-col items-center justify-center font-bold ${getScoreColor(company.complianceScore)}`}>
-                          <span className="text-xl">{company.complianceScore}</span>
-                          <span className="text-xs">/100</span>
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            {getStatusIcon(company.complianceScore)}
-                            <span className="font-medium text-dark-text">
-                              {company.complianceScore >= 80 ? 'Fully Compliant' : 
-                               company.complianceScore >= 60 ? 'Needs Attention' : 'Critical Issues'}
-                            </span>
-                          </div>
-                          <p className="text-sm text-dark-text-secondary">Last scan: {company.lastScan}</p>
-                        </div>
-                      </div>
+                </div>
+              </div>
 
-                      <div className="space-y-2 mb-4">
-                        {company.violations && company.violations.length > 0 ? (
-                          <>
-                            <p className="text-sm text-red-400">⚠️ {company.violations.length} violations to fix</p>
-                            <p className="text-sm text-yellow-400">📬 {company.pendingRequests} pending citizen requests</p>
-                          </>
-                        ) : (
-                          <>
-                            <p className="text-sm text-brand-green">✓ All checks passed</p>
-                            <p className="text-sm text-brand-green">✓ No pending requests</p>
-                          </>
-                        )}
-                      </div>
-
-                      <div className="flex gap-3">
-                        <Link to={`/company/${company.id}`} className="inline-flex items-center gap-2 px-4 py-2 bg-transparent text-brand-green border border-brand-green rounded-lg font-semibold hover:bg-brand-green hover:text-black transition-all duration-200">
-                          <Eye className="h-4 w-4" />
-                          View Details
-                        </Link>
-                        <button className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green text-black rounded-lg font-semibold hover:bg-lemon-green transition-all duration-200">
-                          <Scan className="h-4 w-4" />
-                          Scan Now
-                        </button>
-                        {company.pendingRequests > 0 && (
-                          <Link to={`/company/${company.id}/requests`} className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-500 text-black rounded-lg font-semibold hover:bg-yellow-600 transition-all duration-200">
-                            View Requests
-                          </Link>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                )}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                  <CheckCircle className="h-12 w-12 text-emerald-600 mx-auto mb-3" />
+                  <div className="text-3xl font-black text-gray-900 mb-1">12</div>
+                  <div className="text-sm font-semibold text-emerald-600">Checks Passed</div>
+                </div>
+                <div className="text-center p-6 bg-amber-50 rounded-2xl border border-amber-200">
+                  <AlertTriangle className="h-12 w-12 text-amber-600 mx-auto mb-3" />
+                  <div className="text-3xl font-black text-gray-900 mb-1">3</div>
+                  <div className="text-sm font-semibold text-amber-600">Warnings</div>
+                </div>
+                <div className="text-center p-6 bg-red-50 rounded-2xl border border-red-200">
+                  <AlertTriangle className="h-12 w-12 text-red-600 mx-auto mb-3" />
+                  <div className="text-3xl font-black text-gray-900 mb-1">2</div>
+                  <div className="text-sm font-semibold text-red-600">Critical Issues</div>
+                </div>
               </div>
             </div>
 
-            {/* My Data */}
-            <div className="bg-dark-card border border-dark-border rounded-xl">
-              <div className="p-6 border-b border-dark-border">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold text-dark-text flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-brand-green" />
-                    MY <span className="text-brand-green">DATA</span>
-                  </h2>
-                  <button className="inline-flex items-center gap-2 px-4 py-2 bg-transparent text-brand-green border border-brand-green rounded-lg font-semibold hover:bg-brand-green hover:text-black transition-all duration-200">
-                    <Plus className="h-4 w-4" />
-                    Track Another Company
-                  </button>
+            {/* Data Connections Overview */}
+            <div className="premium-card rounded-3xl p-10">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-3xl font-black text-gray-900">
+                  My <span className="text-blue-600">Data Connections</span>
+                </h2>
+                <Link to="/data-connections" className="text-blue-600 hover:text-blue-700 font-bold flex items-center gap-2">
+                  <Eye className="h-5 w-5" />
+                  View All
+                </Link>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="text-center p-6 bg-blue-50 rounded-2xl">
+                  <div className="text-3xl font-black text-blue-600 mb-2">3</div>
+                  <div className="text-sm font-semibold text-gray-600">Connected</div>
+                </div>
+                <div className="text-center p-6 bg-blue-50 rounded-2xl">
+                  <div className="text-3xl font-black text-blue-600 mb-2">2</div>
+                  <div className="text-sm font-semibold text-gray-600">Pending</div>
+                </div>
+                <div className="text-center p-6 bg-blue-50 rounded-2xl">
+                  <div className="text-3xl font-black text-blue-600 mb-2">1</div>
+                  <div className="text-sm font-semibold text-gray-600">Invited</div>
                 </div>
               </div>
-              <div className="p-6">
-                {userDataConnections.length === 0 ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-lemon-green rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <Shield className="h-8 w-8 text-black" />
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center justify-between p-6 bg-blue-50 rounded-2xl border border-blue-200">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
+                      <CheckCircle className="h-6 w-6 text-white" />
                     </div>
-                    <h3 className="text-lg font-semibold text-dark-text mb-2">No Data Connections</h3>
-                    <p className="text-dark-text-secondary mb-6">Start tracking companies that hold your personal data</p>
-                    <Link to="/my-data/add" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green text-black rounded-xl font-bold hover:bg-lemon-green transition-all duration-200">
-                      <Plus className="h-4 w-4" />
-                      Add Company
-                    </Link>
+                    <div>
+                      <div className="font-black text-gray-900 text-lg">Jumia Nigeria</div>
+                      <div className="text-sm text-gray-600">Email, Phone, Purchase History</div>
+                    </div>
                   </div>
-                ) : (
-                  <>
-                    <p className="text-dark-text-secondary mb-6">Companies holding your personal data:</p>
-                    <div className="space-y-6">
-                      {userDataConnections.map((connection) => (
-                        <div key={connection.id} className="bg-dark-bg border border-dark-border rounded-lg p-6 hover:border-brand-green transition-all duration-200">
-                          <div className="flex items-start justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                              <span className="text-2xl">{connection.companyLogo}</span>
-                              <div>
-                                <h3 className="font-semibold text-dark-text">{connection.companyName}</h3>
-                                <p className="text-sm text-dark-text-secondary">Compliance: <span className="text-brand-green">{connection.complianceScore}/100</span></p>
-                              </div>
-                            </div>
-                            <button className="text-dark-text-secondary hover:text-brand-green transition-colors">
-                              <span className="text-lg">•••</span>
-                            </button>
-                          </div>
-
-                          <div className="mb-4">
-                            <p className="text-sm font-medium text-dark-text mb-2">Data they hold:</p>
-                            <ul className="text-sm text-dark-text-secondary space-y-1">
-                              {connection.dataTypes.map((type, index) => (
-                                <li key={index}>• {type}</li>
-                              ))}
-                            </ul>
-                          </div>
-
-                          <div className="mb-4">
-                            <p className="text-sm text-dark-text-secondary">
-                              <span className="font-medium text-dark-text">Purpose:</span> {connection.purpose}
-                            </p>
-                            <p className="text-sm text-dark-text-secondary">
-                              <span className="font-medium text-dark-text">Consent:</span> <span className="text-brand-green">✅ Active since {connection.consentDate}</span>
-                            </p>
-                          </div>
-
-                          <div className="flex gap-3">
-                            <button className="inline-flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-all duration-200 text-sm">
-                              Revoke Consent
-                            </button>
-                            <button className="inline-flex items-center gap-2 px-3 py-2 bg-transparent text-brand-green border border-brand-green rounded-lg font-semibold hover:bg-brand-green hover:text-black transition-all duration-200 text-sm">
-                              Request Data
-                            </button>
-                            <button className="inline-flex items-center gap-2 px-3 py-2 bg-transparent text-brand-green border border-brand-green rounded-lg font-semibold hover:bg-brand-green hover:text-black transition-all duration-200 text-sm">
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-                      ))}
+                  <span className="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-full">Connected</span>
+                </div>
+                
+                <div className="flex items-center justify-between p-6 bg-blue-50 rounded-2xl border border-blue-200">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
+                      <Clock className="h-6 w-6 text-white" />
                     </div>
-                  </>
-                )}
+                    <div>
+                      <div className="font-black text-gray-900 text-lg">GTBank</div>
+                      <div className="text-sm text-gray-600">Account Info, Transaction History</div>
+                    </div>
+                  </div>
+                  <span className="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-full">Pending</span>
+                </div>
+              </div>
+              
+              <Link 
+                to="/connect-company" 
+                className="w-full flex items-center justify-center gap-3 p-6 bg-blue-600 text-white rounded-2xl font-bold text-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-200"
+              >
+                <Building2 className="h-6 w-6" />
+                Connect New Company
+              </Link>
+            </div>
+
+            {/* Recent Activity */}
+            <div className="premium-card rounded-3xl p-10">
+              <h2 className="text-3xl font-black text-gray-900 mb-8">
+                Recent <span className="text-blue-600">Activity</span>
+              </h2>
+              <div className="space-y-6">
+                <div className="flex items-start gap-6 p-6 bg-blue-50 rounded-2xl border border-blue-200">
+                  <div className="w-3 h-3 bg-blue-600 rounded-full mt-3"></div>
+                  <div className="flex-1">
+                    <p className="font-black text-gray-900 text-lg">Policy analysis completed</p>
+                    <p className="text-gray-600 mb-2">Compliance score updated to 78%</p>
+                    <p className="text-sm text-gray-500">2 hours ago</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-6 p-6 bg-blue-50 rounded-2xl border border-blue-200">
+                  <div className="w-3 h-3 bg-blue-600 rounded-full mt-3"></div>
+                  <div className="flex-1">
+                    <p className="font-black text-gray-900 text-lg">New DSR request received</p>
+                    <p className="text-gray-600 mb-2">Data access request from Ada Okafor</p>
+                    <p className="text-sm text-gray-500">1 day ago</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-6 p-6 bg-blue-50 rounded-2xl border border-blue-200">
+                  <div className="w-3 h-3 bg-blue-600 rounded-full mt-3"></div>
+                  <div className="flex-1">
+                    <p className="font-black text-gray-900 text-lg">Certificate generated</p>
+                    <p className="text-gray-600 mb-2">NDPR compliance certificate issued</p>
+                    <p className="text-sm text-gray-500">3 days ago</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Recent Activity */}
-            <div className="bg-dark-card border border-dark-border rounded-xl">
-              <div className="p-6 border-b border-dark-border">
-                <h3 className="text-lg font-semibold text-dark-text flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-brand-green" />
-                  RECENT <span className="text-brand-green">ACTIVITY</span>
-                </h3>
-              </div>
-              <div className="p-6">
-                <div className="space-y-4">
-                  {activities.map((activity) => (
-                    <div key={activity.id} className="flex items-start gap-3">
-                      <div className={`w-2 h-2 rounded-full mt-2 ${
-                        activity.status === 'success' ? 'bg-brand-green' :
-                        activity.status === 'warning' ? 'bg-yellow-500' :
-                        activity.status === 'info' ? 'bg-brand-green' : 'bg-dark-text-secondary'
-                      }`}></div>
-                      <div className="flex-1">
-                        <p className="text-sm text-dark-text">{activity.message}</p>
-                        <p className="text-xs text-dark-text-secondary">{activity.time}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-6">
-                  <Link to="/activity" className="text-brand-green hover:text-lemon-green text-sm font-medium">
-                    View All Activity →
-                  </Link>
-                </div>
+          {/* Right Sidebar */}
+          <div className="space-y-8">
+            {/* Quick Actions */}
+            <div className="premium-card rounded-3xl p-8">
+              <h3 className="text-2xl font-black text-gray-900 mb-6">
+                Quick <span className="text-blue-600">Actions</span>
+              </h3>
+              <div className="space-y-4">
+                <Link 
+                  to="/policy-upload" 
+                  className="w-full flex items-center gap-4 p-5 bg-blue-50 hover:bg-blue-100 rounded-2xl text-gray-900 font-semibold transition-all duration-200 border border-blue-200"
+                >
+                  <div className="p-3 bg-blue-600 rounded-xl">
+                    <Upload className="h-5 w-5 text-white" />
+                  </div>
+                  <span>Upload Policy</span>
+                </Link>
+                <Link 
+                  to="/companies" 
+                  className="w-full flex items-center gap-4 p-5 bg-blue-50 hover:bg-blue-100 rounded-2xl text-gray-900 font-semibold transition-all duration-200 border border-blue-200"
+                >
+                  <div className="p-3 bg-blue-600 rounded-xl">
+                    <Building2 className="h-5 w-5 text-white" />
+                  </div>
+                  <span>View Companies</span>
+                </Link>
+                <Link 
+                  to="/data-connections" 
+                  className="w-full flex items-center gap-4 p-5 bg-blue-50 hover:bg-blue-100 rounded-2xl text-gray-900 font-semibold transition-all duration-200 border border-blue-200"
+                >
+                  <div className="p-3 bg-blue-600 rounded-xl">
+                    <Shield className="h-5 w-5 text-white" />
+                  </div>
+                  <span>My Data Connections</span>
+                </Link>
+                <Link 
+                  to="/register-company" 
+                  className="w-full flex items-center gap-4 p-5 bg-blue-50 hover:bg-blue-100 rounded-2xl text-gray-900 font-semibold transition-all duration-200 border border-blue-200"
+                >
+                  <div className="p-3 bg-blue-600 rounded-xl">
+                    <FileText className="h-5 w-5 text-white" />
+                  </div>
+                  <span>Register Company</span>
+                </Link>
               </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="bg-dark-card border border-dark-border rounded-xl">
-              <div className="p-6 border-b border-dark-border">
-                <h3 className="text-lg font-semibold text-dark-text flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-brand-green" />
-                  QUICK <span className="text-brand-green">ACTIONS</span>
-                </h3>
-              </div>
-              <div className="p-6 space-y-3">
-                <Link to="/company/new" className="w-full flex items-center gap-3 p-3 bg-dark-bg border border-dark-border rounded-lg text-dark-text hover:border-brand-green hover:bg-lemon-green hover:text-black transition-all duration-200">
-                  <Plus className="h-5 w-5 text-brand-green" />
-                  Register Company
-                </Link>
-                <Link to="/scan" className="w-full flex items-center gap-3 p-3 bg-dark-bg border border-dark-border rounded-lg text-dark-text hover:border-brand-green hover:bg-lemon-green hover:text-black transition-all duration-200">
-                  <Scan className="h-5 w-5 text-brand-green" />
-                  Free Compliance Scan
-                </Link>
-                <Link to="/explore" className="w-full flex items-center gap-3 p-3 bg-dark-bg border border-dark-border rounded-lg text-dark-text hover:border-brand-green hover:bg-lemon-green hover:text-black transition-all duration-200">
-                  <TrendingUp className="h-5 w-5 text-brand-green" />
-                  View Leaderboard
-                </Link>
-                <Link to="/resources" className="w-full flex items-center gap-3 p-3 bg-dark-bg border border-dark-border rounded-lg text-dark-text hover:border-brand-green hover:bg-lemon-green hover:text-black transition-all duration-200">
-                  <FileText className="h-5 w-5 text-brand-green" />
-                  Download Templates
-                </Link>
+            {/* Compliance Tips */}
+            <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-indigo-50 to-purple-50">
+              <h3 className="text-2xl font-black text-gray-900 mb-6">
+                💡 <span className="text-indigo-600">Compliance Tips</span>
+              </h3>
+              <div className="space-y-4">
+                <div className="p-4 bg-white rounded-xl border border-indigo-200">
+                  <h4 className="font-bold text-gray-900 mb-2">Update Privacy Policy</h4>
+                  <p className="text-sm text-gray-600">Ensure your privacy policy reflects current data practices</p>
+                </div>
+                <div className="p-4 bg-white rounded-xl border border-indigo-200">
+                  <h4 className="font-bold text-gray-900 mb-2">Appoint Data Officer</h4>
+                  <p className="text-sm text-gray-600">Designate a Data Protection Officer for NDPR compliance</p>
+                </div>
+                <div className="p-4 bg-white rounded-xl border border-indigo-200">
+                  <h4 className="font-bold text-gray-900 mb-2">Regular Audits</h4>
+                  <p className="text-sm text-gray-600">Conduct quarterly data protection impact assessments</p>
+                </div>
               </div>
             </div>
           </div>

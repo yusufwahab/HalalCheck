@@ -152,36 +152,43 @@ const CompanyProfile = ({ user }) => {
         </div>
 
         {/* Company Header */}
-        <div className="bg-dark-card rounded-xl border border-dark-border p-8 mb-8">
+        <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 mb-8 shadow-2xl">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-6">
-              <div className="w-20 h-20 bg-lemon-green rounded-xl flex items-center justify-center">
-                <span className="text-3xl font-bold text-black">J</span>
+              <div className="w-20 h-20 bg-gradient-to-br from-brand-green to-brand-blue rounded-2xl flex items-center justify-center shadow-lg">
+                <span className="text-3xl font-bold text-white">J</span>
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-dark-text">{company.name}</h1>
-                <p className="text-dark-text-secondary">{company.website}</p>
+                <h1 className="text-4xl font-bold gradient-text">{company.name}</h1>
+                <p className="text-dark-text-secondary text-lg">{company.website}</p>
                 <p className="text-dark-text-secondary">{company.industry} • {company.location}</p>
                 <p className="text-sm text-dark-text-secondary">Member since {company.memberSince}</p>
               </div>
             </div>
             <div className="text-center">
-              <div className="w-24 h-24 rounded-full bg-green-50 flex flex-col items-center justify-center mb-2">
-                <span className="text-2xl font-bold text-green-600">{company.complianceScore}</span>
-                <span className="text-sm text-green-600">/100</span>
+              <div className="relative">
+                <div className="w-24 h-24 rounded-full border-4 border-dark-surface flex items-center justify-center relative">
+                  <div className="absolute inset-0 rounded-full border-4 border-success" style={{
+                    background: `conic-gradient(#10B981 ${company.complianceScore * 3.6}deg, transparent 0deg)`
+                  }}></div>
+                  <div className="text-center z-10 bg-dark-bg rounded-full w-20 h-20 flex flex-col items-center justify-center">
+                    <span className="text-xl font-bold text-success">{company.complianceScore}</span>
+                    <span className="text-xs text-dark-text-secondary">/100</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-1 text-green-600">
-                <CheckCircle className="h-4 w-4" />
-                <span className="text-sm font-medium">Compliant</span>
+              <div className="flex items-center justify-center gap-1 text-success mt-3">
+                <CheckCircle className="h-5 w-5" />
+                <span className="font-semibold">Compliant</span>
               </div>
-              <p className="text-xs text-dark-text-secondary mt-1">Last verified: {company.lastVerified}</p>
+              <p className="text-xs text-dark-text-secondary mt-2">Last verified: {company.lastVerified}</p>
               <p className="text-xs text-dark-text-secondary">{company.trustedUsers.toLocaleString()} users trust this company</p>
             </div>
           </div>
         </div>
 
         {/* Connection Status */}
-        <div className="bg-dark-card rounded-xl border border-dark-border p-6 mb-8">
+        <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 mb-8 shadow-2xl">
           <h2 className="text-xl font-semibold mb-4 text-dark-text">Your Connection Status</h2>
           
           {isConnected ? (
@@ -264,8 +271,8 @@ const CompanyProfile = ({ user }) => {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Compliance Summary */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-              <h2 className="text-xl font-semibold mb-4 text-dark-text">Compliance Summary</h2>
+            <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 shadow-lg">
+              <h2 className="text-2xl font-bold gradient-text mb-6">Compliance Summary</h2>
               
               <div className="mb-6">
                 <h3 className="font-medium text-dark-text mb-3">What they're doing right:</h3>
@@ -297,8 +304,8 @@ const CompanyProfile = ({ user }) => {
             </div>
 
             {/* Company Responsiveness */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-              <h2 className="text-xl font-semibold mb-4 text-dark-text">Company Responsiveness</h2>
+            <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 shadow-lg">
+              <h2 className="text-2xl font-bold gradient-text mb-6">Company Responsiveness</h2>
               
               <div className="mb-6">
                 <h3 className="font-medium mb-3 text-dark-text">How quickly do they respond to requests?</h3>
@@ -340,8 +347,8 @@ const CompanyProfile = ({ user }) => {
             </div>
 
             {/* User Reviews */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-              <h2 className="text-xl font-semibold mb-4 text-dark-text">User Reviews</h2>
+            <div className="glass-effect rounded-2xl border border-dark-border/30 p-8 shadow-lg">
+              <h2 className="text-2xl font-bold gradient-text mb-6">User Reviews</h2>
               <p className="text-dark-text-secondary mb-4">What other citizens are saying:</p>
               
               <div className="space-y-4">
@@ -370,9 +377,11 @@ const CompanyProfile = ({ user }) => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Privacy Policy */}
-            <div className="bg-dark-card rounded-xl border border-dark-border p-6">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-dark-text">
-                <FileText className="h-5 w-5" />
+            <div className="glass-effect rounded-xl border border-dark-border/30 p-6 shadow-lg">
+              <h3 className="text-xl font-bold gradient-text mb-6 flex items-center gap-3">
+                <div className="p-2 bg-gradient-to-br from-brand-purple to-accent-orange rounded-xl">
+                  <FileText className="h-5 w-5 text-white" />
+                </div>
                 Privacy Policy
               </h3>
               <div className="space-y-3">
