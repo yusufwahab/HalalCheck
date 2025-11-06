@@ -28,7 +28,7 @@ const CitizenRequest = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-dark-bg flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center">
           <div className="glass-effect rounded-2xl p-8">
             <div className="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -55,7 +55,7 @@ const CitizenRequest = () => {
   }
 
   return (
-    <div className="min-h-screen bg-dark-bg p-4">
+    <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-2xl mx-auto pt-20">
         {/* Header */}
         <div className="text-center mb-8">

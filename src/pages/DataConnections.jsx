@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import { Building2, CheckCircle, Clock, AlertCircle, Eye, Shield, Download, Plus, Search, Filter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+// Import company logos
+import JumiaLogo from '../assets/Jumia_logo.jpg';
+import GTBankLogo from '../assets/Gtbank_logo.png';
+import FlutterwaveLogo from '../assets/Flutterwave_logo.png';
+import PaystackLogo from '../assets/Paystack_logo.png';
+import InterswitchLogo from '../assets/interswitch_logo.jpg';
+
 const DataConnections = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -10,7 +17,7 @@ const DataConnections = () => {
     {
       id: 1,
       company: 'Jumia Nigeria',
-      logo: '🛒',
+      logo: JumiaLogo,
       status: 'connected',
       dataTypes: ['Email', 'Phone', 'Purchase History', 'Delivery Address'],
       connectedDate: '2024-01-15',
@@ -20,7 +27,7 @@ const DataConnections = () => {
     {
       id: 2,
       company: 'GTBank',
-      logo: '🏦',
+      logo: GTBankLogo,
       status: 'pending',
       dataTypes: ['Account Info', 'Transaction History', 'KYC Data'],
       connectedDate: '2024-01-20',
@@ -30,7 +37,7 @@ const DataConnections = () => {
     {
       id: 3,
       company: 'Flutterwave',
-      logo: '💳',
+      logo: FlutterwaveLogo,
       status: 'connected',
       dataTypes: ['Payment Info', 'Transaction Data', 'Merchant Details'],
       connectedDate: '2024-01-10',
@@ -40,7 +47,7 @@ const DataConnections = () => {
     {
       id: 4,
       company: 'Paystack',
-      logo: '💰',
+      logo: PaystackLogo,
       status: 'invited',
       dataTypes: ['Payment Methods', 'Transaction History'],
       connectedDate: '2024-01-22',
@@ -49,10 +56,10 @@ const DataConnections = () => {
     },
     {
       id: 5,
-      company: 'Konga',
-      logo: '🛍️',
+      company: 'Interswitch',
+      logo: InterswitchLogo,
       status: 'disconnected',
-      dataTypes: ['Profile Data', 'Order History'],
+      dataTypes: ['Profile Data', 'Payment History'],
       connectedDate: '2023-12-05',
       lastActivity: '2 weeks ago',
       complianceScore: 75
@@ -93,8 +100,7 @@ const DataConnections = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 ml-64">
-      <div className="p-8">
+    <div className="min-h-screen bg-gray-50 p-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -173,8 +179,8 @@ const DataConnections = () => {
               <div key={connection.id} className="p-6 bg-white rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-200">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-2xl">
-                      {connection.logo}
+                    <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center border border-gray-200 overflow-hidden">
+                      <img src={connection.logo} alt={`${connection.company} logo`} className="w-12 h-12 object-contain" />
                     </div>
                     <div>
                       <h3 className="text-xl font-black text-gray-900">{connection.company}</h3>
@@ -238,7 +244,6 @@ const DataConnections = () => {
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 };

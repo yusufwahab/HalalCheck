@@ -5,45 +5,25 @@ const Navbar = ({ user, onToggleSidebar, sidebarOpen }) => {
   const [notifications] = useState(3);
 
   return (
-    <nav className={`glass-effect border-b border-gray-200 sticky top-0 z-30 backdrop-blur-xl transition-all duration-300 ${
-      sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'
+    <nav className={`glass-effect border-b border-gray-200 sticky top-4 z-30 backdrop-blur-xl transition-all duration-300 ${
+      sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'
     }`}>
       <div className="px-6">
         <div className="flex justify-between items-center h-16">
-          {/* Left side - Menu button and Search */}
-          <div className="flex items-center gap-4 flex-1">
-            {/* Mobile menu button */}
-            <button 
-              onClick={onToggleSidebar}
-              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 lg:hidden"
-            >
-              <Menu className="h-6 w-6" />
-            </button>
-            
-            {/* Desktop toggle button */}
-            <button 
-              onClick={onToggleSidebar}
-              className="hidden lg:block p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
-            >
-              <Menu className="h-6 w-6" />
-            </button>
-
-            {/* Search Bar */}
-            <div className="flex items-center flex-1 max-w-md">
-              <div className="relative w-full">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search companies, regulations..."
-                  className="w-full pl-12 pr-6 py-3 bg-gray-50 border-2 border-gray-200 text-gray-900 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all duration-200"
-                />
-              </div>
+          {/* Left side - Search Bar */}
+          <div className="flex items-center gap-4 flex-1 max-w-md">
+            <div className="relative w-full">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search companies, regulations..."
+                className="w-full pl-12 pr-6 py-3 bg-gray-50 border-2 border-gray-200 text-gray-900 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all duration-200"
+              />
             </div>
           </div>
 
-          {/* Right side - Notifications only */}
+          {/* Right side - Notifications */}
           <div className="flex items-center gap-4">
-            {/* Notifications */}
             <button className="relative p-3 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all duration-200">
               <Bell className="h-6 w-6" />
               {notifications > 0 && (

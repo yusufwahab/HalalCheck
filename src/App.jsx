@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
+import Layout from './components/Layout';
 import Homepage from './pages/Homepage';
 import Dashboard from './pages/Dashboard';
 import Companies from './pages/Companies';
@@ -19,6 +19,8 @@ import Remediation from './pages/Remediation';
 import Certificate from './pages/Certificate';
 import DSRManagement from './pages/DSRManagement';
 import CitizenRequest from './pages/CitizenRequest';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 function App() {
   const [user, setUser] = useState({
@@ -33,6 +35,8 @@ function App() {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+  
+
 
 
 
@@ -41,40 +45,47 @@ function App() {
       <div className="app">
         <Routes>
           <Route path="/" element={<Homepage user={user} setUser={setUser} />} />
+          <Route path="/login" element={<Login onLogin={(data) => setUser({...user, ...data, isLoggedIn: true})} />} />
+          <Route path="/signup" element={<Signup onSignup={(data) => setUser({...user, ...data, isLoggedIn: true})} />} />
           <Route path="/companies" element={
             <>
-              <Sidebar user={user} />
-              <Navbar user={user} />
-              <Companies />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <Companies />
+              </Layout>
             </>
           } />
           <Route path="/register-company" element={
             <>
-              <Sidebar user={user} />
-              <Navbar user={user} />
-              <RegisterCompany />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <RegisterCompany />
+              </Layout>
             </>
           } />
           <Route path="/data-connections" element={
             <>
-              <Sidebar user={user} />
-              <Navbar user={user} />
-              <DataConnections />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <DataConnections />
+              </Layout>
             </>
           } />
           <Route path="/connect-company" element={
             <>
-              <Sidebar user={user} />
-              <Navbar user={user} />
-              <ConnectCompany />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <ConnectCompany />
+              </Layout>
             </>
           } />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/policy-upload" element={
             <>
-              <Sidebar user={user} />
-              <Navbar user={user} />
-              <PolicyUpload />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <PolicyUpload />
+              </Layout>
             </>
           } />
           <Route path="/compliance-score" element={<ComplianceScore />} />
@@ -82,51 +93,58 @@ function App() {
           <Route path="/certificate" element={<Certificate />} />
           <Route path="/citizen-request" element={
             <>
-              <Sidebar user={user} />
-              <Navbar user={user} />
-              <CitizenRequest />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <CitizenRequest />
+              </Layout>
             </>
           } />
           <Route path="/dsr-management" element={
             <>
-              <Sidebar user={user} />
-              <Navbar user={user} />
-              <DSRManagement user={user} />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <DSRManagement user={user} />
+              </Layout>
             </>
           } />
           <Route path="/dashboard" element={
             <>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
-              <Navbar user={user} onToggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
-              <Dashboard user={user} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <Dashboard user={user} />
+              </Layout>
             </>
           } />
           <Route path="/company/:id" element={
             <>
-              <Sidebar user={user} />
-              <Navbar user={user} />
-              <CompanyDetail user={user} />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <CompanyDetail user={user} />
+              </Layout>
             </>
           } />
           <Route path="/explore" element={
             <>
-              <Sidebar user={user} />
-              <Navbar user={user} />
-              <Explore user={user} />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <Explore user={user} />
+              </Layout>
             </>
           } />
           <Route path="/profile/:companyId" element={
             <>
-              <Sidebar user={user} />
-              <Navbar user={user} />
-              <CompanyProfile user={user} />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <CompanyProfile user={user} />
+              </Layout>
             </>
           } />
           <Route path="/request/:id" element={
             <>
-              <Sidebar user={user} />
-              <Navbar user={user} />
-              <RequestDetail user={user} />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <RequestDetail user={user} />
+              </Layout>
             </>
           } />
         </Routes>

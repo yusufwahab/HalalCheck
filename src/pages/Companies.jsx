@@ -1,6 +1,20 @@
 import { Link } from 'react-router-dom';
 import { Building2, MapPin, Star, Shield, TrendingUp, Users, Award, CheckCircle } from 'lucide-react';
 
+// Import company assets
+import JumiaLogo from '../assets/Jumia_logo.jpg';
+import JumiaBuild from '../assets/Jumia_build.jpeg';
+import FlutterwaveLogo from '../assets/Flutterwave_logo.png';
+import FlutterwaveBuild from '../assets/Flutterwave_build.jpg';
+import PaystackLogo from '../assets/Paystack_logo.png';
+import PaystackBuild from '../assets/Paystack_build.jpg';
+import KudaLogo from '../assets/Kuda_logo.png';
+import KudaBuild from '../assets/Kuda_build.jpg';
+import InterswitchLogo from '../assets/interswitch_logo.jpg';
+import InterswitchBuild from '../assets/Interswitch_build.png';
+import GTBankLogo from '../assets/Gtbank_logo.png';
+import GTBankBuild from '../assets/GTBank_building.jpeg';
+
 const Companies = () => {
   const companies = [
     {
@@ -10,11 +24,11 @@ const Companies = () => {
       industry: 'E-commerce',
       location: 'Lagos, Nigeria',
       complianceScore: 92,
-      logo: 'https://via.placeholder.com/80x80/FF6B35/FFFFFF?text=J',
+      logo: JumiaLogo,
+      buildImage: JumiaBuild,
       employees: '5,000+',
       founded: '2012',
-      verified: true,
-      bgColor: 'from-orange-50 to-orange-100'
+      verified: true
     },
     {
       id: 2,
@@ -23,11 +37,11 @@ const Companies = () => {
       industry: 'Fintech',
       location: 'Lagos, Nigeria',
       complianceScore: 95,
-      logo: 'https://via.placeholder.com/80x80/F5A623/FFFFFF?text=F',
+      logo: FlutterwaveLogo,
+      buildImage: FlutterwaveBuild,
       employees: '1,000+',
       founded: '2016',
-      verified: true,
-      bgColor: 'from-yellow-50 to-yellow-100'
+      verified: true
     },
     {
       id: 3,
@@ -36,11 +50,11 @@ const Companies = () => {
       industry: 'Fintech',
       location: 'Lagos, Nigeria',
       complianceScore: 94,
-      logo: 'https://via.placeholder.com/80x80/00C9FF/FFFFFF?text=P',
+      logo: PaystackLogo,
+      buildImage: PaystackBuild,
       employees: '500+',
       founded: '2015',
-      verified: true,
-      bgColor: 'from-cyan-50 to-cyan-100'
+      verified: true
     },
     {
       id: 4,
@@ -49,11 +63,11 @@ const Companies = () => {
       industry: 'Banking',
       location: 'Lagos, Nigeria',
       complianceScore: 89,
-      logo: 'https://via.placeholder.com/80x80/40E0D0/FFFFFF?text=K',
+      logo: KudaLogo,
+      buildImage: KudaBuild,
       employees: '300+',
       founded: '2019',
-      verified: true,
-      bgColor: 'from-teal-50 to-teal-100'
+      verified: true
     },
     {
       id: 5,
@@ -62,11 +76,11 @@ const Companies = () => {
       industry: 'Fintech',
       location: 'Lagos, Nigeria',
       complianceScore: 87,
-      logo: 'https://via.placeholder.com/80x80/8B5CF6/FFFFFF?text=I',
+      logo: InterswitchLogo,
+      buildImage: InterswitchBuild,
       employees: '2,000+',
       founded: '2002',
-      verified: true,
-      bgColor: 'from-purple-50 to-purple-100'
+      verified: true
     },
     {
       id: 6,
@@ -75,11 +89,11 @@ const Companies = () => {
       industry: 'Banking',
       location: 'Lagos, Nigeria',
       complianceScore: 91,
-      logo: 'https://via.placeholder.com/80x80/EF4444/FFFFFF?text=GT',
+      logo: GTBankLogo,
+      buildImage: GTBankBuild,
       employees: '10,000+',
       founded: '1990',
-      verified: true,
-      bgColor: 'from-red-50 to-red-100'
+      verified: true
     }
   ];
 
@@ -98,7 +112,7 @@ const Companies = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 ml-64">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800">
         <div className="absolute inset-0 bg-black opacity-10"></div>
@@ -191,15 +205,15 @@ const Companies = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {companies.map((company) => (
             <div key={company.id} className="group premium-card rounded-3xl overflow-hidden">
-              {/* Company Header with Gradient */}
-              <div className={`bg-gradient-to-br ${company.bgColor} p-8 relative`}>
+              {/* Company Header with Building Background */}
+              <div className="relative p-8 bg-cover bg-center bg-no-repeat" style={{backgroundImage: `linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url(${company.buildImage})`}}>
                 <div className="flex items-start justify-between mb-6">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-lg bg-white p-2">
+                    <div className="w-24 h-24 rounded-2xl overflow-hidden shadow-2xl bg-white p-4 border-4 border-white ring-2 ring-blue-200">
                       <img 
                         src={company.logo} 
                         alt={`${company.name} logo`}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-contain filter brightness-110 contrast-110 saturate-110"
                       />
                     </div>
                     {company.verified && (

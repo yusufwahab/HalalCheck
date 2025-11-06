@@ -1,15 +1,77 @@
 import { Link } from 'react-router-dom';
-import { Upload, Award, Shield, AlertTriangle, CheckCircle, Clock, FileText, Building2, TrendingUp, Users, Zap, Eye } from 'lucide-react';
+import { Upload, Award, Shield, AlertTriangle, CheckCircle, Clock, FileText, Building2, TrendingUp, Users, Zap, Eye, Bell } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 const Dashboard = ({ user }) => {
   const complianceScore = 78;
   const pendingRequests = 3;
   const totalCompanies = 2;
   const certificateStatus = 'Active';
+  
+  const [animatedScore, setAnimatedScore] = useState(0);
+  const [animatedStats, setAnimatedStats] = useState({ passed: 0, warnings: 0, critical: 0 });
+  const [animatedQuickStats, setAnimatedQuickStats] = useState({ score: 0, companies: 0, requests: 0 });
+  const [notifications] = useState(3);
+
+  useEffect(() => {
+    // Animate compliance score
+    const scoreTimer = setTimeout(() => {
+      let current = 0;
+      const increment = complianceScore / 60;
+      const scoreInterval = setInterval(() => {
+        current += increment;
+        if (current >= complianceScore) {
+          setAnimatedScore(complianceScore);
+          clearInterval(scoreInterval);
+        } else {
+          setAnimatedScore(current);
+        }
+      }, 25);
+    }, 500);
+
+    // Animate overview stats
+    const statsTimer = setTimeout(() => {
+      const statsInterval = setInterval(() => {
+        setAnimatedStats(prev => {
+          const newStats = {
+            passed: Math.min(prev.passed + 1, 12),
+            warnings: Math.min(prev.warnings + 1, 3),
+            critical: Math.min(prev.critical + 1, 2)
+          };
+          if (newStats.passed === 12 && newStats.warnings === 3 && newStats.critical === 2) {
+            clearInterval(statsInterval);
+          }
+          return newStats;
+        });
+      }, 100);
+    }, 1000);
+
+    // Animate quick stats cards
+    const quickStatsTimer = setTimeout(() => {
+      const quickInterval = setInterval(() => {
+        setAnimatedQuickStats(prev => {
+          const newStats = {
+            score: Math.min(prev.score + 2, complianceScore),
+            companies: Math.min(prev.companies + 1, totalCompanies),
+            requests: Math.min(prev.requests + 1, pendingRequests)
+          };
+          if (newStats.score === complianceScore && newStats.companies === totalCompanies && newStats.requests === pendingRequests) {
+            clearInterval(quickInterval);
+          }
+          return newStats;
+        });
+      }, 50);
+    }, 200);
+
+    return () => {
+      clearTimeout(scoreTimer);
+      clearTimeout(statsTimer);
+      clearTimeout(quickStatsTimer);
+    };
+  }, [complianceScore, totalCompanies, pendingRequests]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 ml-64">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 px-6 py-8">
         {/* Welcome Header */}
         <div className="mb-12">
           <div className="flex items-center justify-between">
@@ -19,41 +81,44 @@ const Dashboard = ({ user }) => {
               </h1>
               <p className="text-xl text-gray-600">Manage your <span className="text-blue-600 font-semibold">NDPR compliance</span> and data protection requirements</p>
             </div>
-            <div className="hidden lg:block">
-              <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center floating">
-                <Shield className="h-16 w-16 text-white" />
-              </div>
-            </div>
+            <button className="relative p-3 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all duration-200">
+              <Bell className="h-6 w-6" />
+              {notifications > 0 && (
+                <span className="absolute -top-1 -right-1 h-6 w-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-pulse">
+                  {notifications}
+                </span>
+              )}
+            </button>
           </div>
         </div>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500">
+          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500 transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
               <div className="p-4 bg-blue-600 rounded-2xl">
                 <Shield className="h-8 w-8 text-white" />
               </div>
               <div className="text-right">
-                <div className="text-4xl font-black text-gray-900">{complianceScore}%</div>
+                <div className="text-4xl font-black text-gray-900">{Math.round(animatedQuickStats.score)}%</div>
                 <div className="text-sm font-semibold text-blue-600">Compliance Score</div>
               </div>
             </div>
             <div className="w-full bg-blue-200 rounded-full h-3">
               <div 
                 className="bg-blue-600 h-3 rounded-full transition-all duration-1000" 
-                style={{ width: `${complianceScore}%` }}
+                style={{ width: `${animatedQuickStats.score}%` }}
               ></div>
             </div>
           </div>
           
-          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500">
+          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500 transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
               <div className="p-4 bg-blue-600 rounded-2xl">
                 <Building2 className="h-8 w-8 text-white" />
               </div>
               <div className="text-right">
-                <div className="text-4xl font-black text-gray-900">{totalCompanies}</div>
+                <div className="text-4xl font-black text-gray-900">{animatedQuickStats.companies}</div>
                 <div className="text-sm font-semibold text-blue-600">Connected Companies</div>
               </div>
             </div>
@@ -63,13 +128,13 @@ const Dashboard = ({ user }) => {
             </div>
           </div>
 
-          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500">
+          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500 transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
               <div className="p-4 bg-blue-600 rounded-2xl">
                 <Clock className="h-8 w-8 text-white" />
               </div>
               <div className="text-right">
-                <div className="text-4xl font-black text-gray-900">{pendingRequests}</div>
+                <div className="text-4xl font-black text-gray-900">{animatedQuickStats.requests}</div>
                 <div className="text-sm font-semibold text-blue-600">Pending Requests</div>
               </div>
             </div>
@@ -79,7 +144,7 @@ const Dashboard = ({ user }) => {
             </div>
           </div>
 
-          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500">
+          <div className="premium-card rounded-3xl p-8 bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500 transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
               <div className="p-4 bg-blue-600 rounded-2xl">
                 <Award className="h-8 w-8 text-white" />
@@ -107,17 +172,33 @@ const Dashboard = ({ user }) => {
               </h2>
               
               <div className="flex flex-col lg:flex-row items-center gap-10 mb-10">
-                <div className="relative">
-                  <div className="w-40 h-40 rounded-full border-8 border-gray-100 flex items-center justify-center relative">
-                    <div 
-                      className="absolute inset-0 rounded-full border-8 border-blue-500" 
-                      style={{
-                        background: `conic-gradient(#3b82f6 ${complianceScore * 3.6}deg, transparent 0deg)`
-                      }}
-                    ></div>
-                    <div className="text-center z-10 bg-white rounded-full w-32 h-32 flex flex-col items-center justify-center shadow-lg">
-                      <span className="text-4xl font-black text-blue-600">{complianceScore}</span>
-                      <span className="text-lg text-gray-500 font-semibold">/100</span>
+                <div className="relative w-40 h-40 mx-auto">
+                  <svg className="w-40 h-40 transform -rotate-90" viewBox="0 0 160 160">
+                    <circle
+                      cx="80"
+                      cy="80"
+                      r="70"
+                      stroke="#e5e7eb"
+                      strokeWidth="8"
+                      fill="none"
+                    />
+                    <circle
+                      cx="80"
+                      cy="80"
+                      r="70"
+                      stroke="#3b82f6"
+                      strokeWidth="8"
+                      fill="none"
+                      strokeDasharray={`${2 * Math.PI * 70}`}
+                      strokeDashoffset={`${2 * Math.PI * 70 * (1 - animatedScore / 100)}`}
+                      className="transition-all duration-1000 ease-out"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center bg-white rounded-full w-28 h-28 flex flex-col items-center justify-center shadow-lg">
+                      <span className="text-3xl font-black text-blue-600">{Math.round(animatedScore)}</span>
+                      <span className="text-sm text-gray-500 font-semibold">/100</span>
                     </div>
                   </div>
                 </div>
@@ -145,19 +226,19 @@ const Dashboard = ({ user }) => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+                <div className="text-center p-6 bg-emerald-50 rounded-2xl border border-emerald-200 transform hover:scale-105 transition-all duration-300">
                   <CheckCircle className="h-12 w-12 text-emerald-600 mx-auto mb-3" />
-                  <div className="text-3xl font-black text-gray-900 mb-1">12</div>
+                  <div className="text-3xl font-black text-gray-900 mb-1">{animatedStats.passed}</div>
                   <div className="text-sm font-semibold text-emerald-600">Checks Passed</div>
                 </div>
-                <div className="text-center p-6 bg-amber-50 rounded-2xl border border-amber-200">
+                <div className="text-center p-6 bg-amber-50 rounded-2xl border border-amber-200 transform hover:scale-105 transition-all duration-300">
                   <AlertTriangle className="h-12 w-12 text-amber-600 mx-auto mb-3" />
-                  <div className="text-3xl font-black text-gray-900 mb-1">3</div>
+                  <div className="text-3xl font-black text-gray-900 mb-1">{animatedStats.warnings}</div>
                   <div className="text-sm font-semibold text-amber-600">Warnings</div>
                 </div>
-                <div className="text-center p-6 bg-red-50 rounded-2xl border border-red-200">
+                <div className="text-center p-6 bg-red-50 rounded-2xl border border-red-200 transform hover:scale-105 transition-all duration-300">
                   <AlertTriangle className="h-12 w-12 text-red-600 mx-auto mb-3" />
-                  <div className="text-3xl font-black text-gray-900 mb-1">2</div>
+                  <div className="text-3xl font-black text-gray-900 mb-1">{animatedStats.critical}</div>
                   <div className="text-sm font-semibold text-red-600">Critical Issues</div>
                 </div>
               </div>
@@ -330,7 +411,6 @@ const Dashboard = ({ user }) => {
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 };
