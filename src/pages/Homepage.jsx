@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Shield, ArrowRight, Play, Star, CheckCircle, Users, Building2, TrendingUp, Award, AlertTriangle, Clock, Zap, Target, Globe, Lock, FileCheck, BarChart3 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import trustBridgeLogo from "../assets/TrustBridgeLogo.png";
+import AuthBg from '../assets/Trustbridge_authpages_img.png';
 
 // Import company logos
 import FlutterwaveLogo from '../assets/Flutterwave_logo.png';
@@ -75,45 +76,55 @@ const Homepage = ({ user, setUser }) => {
             <nav className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-gray-600 hover:text-blue-600 font-semibold transition-colors">Features</a>
               <a href="#companies" className="text-gray-600 hover:text-blue-600 font-semibold transition-colors">Companies</a>
-              <Link to="/mode-selection" className="text-gray-600 hover:text-blue-600 font-semibold transition-colors">Login</Link>
-              <Link to="/dashboard" className="px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all">Get Started</Link>
+              <Link to="/login" className="text-gray-600 hover:text-blue-600 font-semibold transition-colors">Login</Link>
+              <Link to="/login" className="px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all">Get Started</Link>
             </nav>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-indigo-50"></div>
+      <section 
+        className="relative pt-32 pb-20 overflow-hidden"
+        style={{ 
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${AuthBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className={`inline-flex items-center px-6 py-3 bg-blue-100 rounded-full text-blue-800 text-sm font-bold mb-8 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
               <Shield className="h-4 w-4 mr-2 text-blue-600 animate-pulse" />
               Now supporting NDPR 2024 updates
             </div>
-            <h1 className="text-6xl md:text-7xl font-black text-gray-900 mb-8 leading-tight">
+            <h1 className="text-6xl md:text-7xl font-black text-white mb-8 leading-tight">
               Nigerian Data<br />
-              <span className="text-blue-600">Compliance</span><br />
-              <span className="text-4xl md:text-5xl text-gray-600 font-light">Simplified</span>
+              <span className="text-blue-400">Compliance</span><br />
+              <span className="text-4xl md:text-5xl text-gray-200 font-light">Simplified</span>
             </h1>
-            <p className="text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12">
-              Automate <span className="text-blue-600 font-semibold">NDPR compliance</span> with AI-powered analysis. 
-              Empower <span className="text-blue-600 font-semibold">citizens</span> to control their data rights with transparency and trust.
+            <p className="text-2xl text-gray-200 max-w-4xl mx-auto leading-relaxed mb-12">
+              Automate <span className="text-blue-400 font-semibold">NDPR compliance</span> with AI-powered analysis. 
+              Empower <span className="text-blue-400 font-semibold">citizens</span> to control their data rights with transparency and trust.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
               <Link 
-                to="/dashboard" 
+                to="/login" 
                 className="inline-flex items-center px-10 py-5 bg-blue-600 text-white text-xl rounded-2xl font-bold hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg"
               >
                 Start Free Compliance Check
                 <ArrowRight className="h-6 w-6 ml-3 text-white" />
               </Link>
-              <button className="inline-flex items-center px-10 py-5 bg-white border-2 border-blue-600 text-blue-600 text-xl rounded-2xl font-bold hover:bg-blue-50 transition-all duration-200">
+              <button 
+                onClick={() => alert('Sorry, the video is not available now')}
+                className="inline-flex items-center px-10 py-5 bg-white border-2 border-blue-600 text-blue-600 text-xl rounded-2xl font-bold hover:bg-blue-50 transition-all duration-200"
+              >
                 <Play className="h-6 w-6 mr-3 text-blue-600" />
                 Watch Demo
               </button>
             </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-gray-600">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-gray-200">
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-2">
                   {[1,2,3,4,5].map(i => (
@@ -123,7 +134,7 @@ const Homepage = ({ user, setUser }) => {
                   ))}
                 </div>
                 <Star className="h-6 w-6 text-blue-600 fill-current" />
-                <span className="font-semibold">Trusted by <span className="text-blue-600 animate-pulse">{animatedStats.companies.toLocaleString()}+</span> businesses</span>
+                <span className="font-semibold">Trusted by <span className="text-blue-400 animate-pulse">{animatedStats.companies.toLocaleString()}+</span> businesses</span>
               </div>
             </div>
           </div>
@@ -270,7 +281,7 @@ const Homepage = ({ user, setUser }) => {
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link 
-              to="/mode-selection"
+              to="/login"
               className="inline-flex items-center px-10 py-5 bg-white text-blue-600 rounded-2xl font-bold text-xl hover:bg-gray-100 transform hover:scale-105 transition-all duration-200"
             >
               <Building2 className="h-6 w-6 mr-3 text-blue-600" />

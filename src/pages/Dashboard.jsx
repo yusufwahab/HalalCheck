@@ -81,14 +81,14 @@ const Dashboard = ({ user }) => {
               </h1>
               <p className="text-xl text-gray-600">Manage your <span className="text-blue-600 font-semibold">NDPR compliance</span> and data protection requirements</p>
             </div>
-            <button className="relative p-3 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all duration-200">
+            <Link to="/notifications" className="relative p-3 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all duration-200">
               <Bell className="h-6 w-6" />
               {notifications > 0 && (
                 <span className="absolute -top-1 -right-1 h-6 w-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-pulse">
                   {notifications}
                 </span>
               )}
-            </button>
+            </Link>
           </div>
         </div>
 

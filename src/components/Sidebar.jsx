@@ -2,9 +2,11 @@ import { Link, useLocation } from 'react-router-dom';
 import { Home, Building2, FileText, BarChart3, Shield, Users, LogOut, Menu, PlusCircle } from 'lucide-react';
 import { useState } from 'react';
 import trustBridgeLogo from '../assets/TrustBridgeLogo.png';
+import { useNavigation } from '../contexts/NavigationContext';
 
 const Sidebar = ({ user, isOpen = true, onToggle }) => {
   const location = useLocation();
+  const { startNavigation } = useNavigation();
 
   const isActive = (path) => location.pathname === path;
 
@@ -60,6 +62,7 @@ const Sidebar = ({ user, isOpen = true, onToggle }) => {
             <Link
               key={item.path}
               to={item.path}
+              onClick={startNavigation}
               className={`flex items-center ${isOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-3 rounded-xl font-semibold transition-all duration-200 ${
                 isActive(item.path)
                   ? 'bg-blue-600 text-white'
@@ -87,19 +90,19 @@ const Sidebar = ({ user, isOpen = true, onToggle }) => {
                 <div className="text-xs text-gray-500">NDPR Platform</div>
               </div>
             </div>
-            <button className="w-full flex items-center gap-3 px-4 py-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-xl font-semibold transition-all duration-200">
+            <Link to="/" className="w-full flex items-center gap-3 px-4 py-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-xl font-semibold transition-all duration-200">
               <LogOut className="h-4 w-4" />
               <span className="text-sm">Sign Out</span>
-            </button>
+            </Link>
           </>
         ) : (
           <div className="flex flex-col items-center gap-2">
             <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
               <Users className="h-5 w-5 text-white" />
             </div>
-            <button className="p-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all duration-200">
+            <Link to="/" className="p-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all duration-200">
               <LogOut className="h-4 w-4" />
-            </button>
+            </Link>
           </div>
         )}
       </div>

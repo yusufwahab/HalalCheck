@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, User, Building, ArrowRight, CheckCircle } from 'lucide-react';
 import TrustBridgeLogo from '../assets/TrustBridgeLogo.png';
 import AuthBg from '../assets/Trustbridge_authpages_img.png';
 
 const Signup = ({ onSignup }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -34,6 +35,7 @@ const Signup = ({ onSignup }) => {
     setTimeout(() => {
       onSignup && onSignup(formData);
       setIsLoading(false);
+      navigate('/dashboard');
     }, 2000);
   };
 
@@ -45,14 +47,15 @@ const Signup = ({ onSignup }) => {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-6">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${AuthBg})` }}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-      </div>
+    <div 
+      className="min-h-screen flex items-center justify-center p-6"
+      style={{ 
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${AuthBg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}
         <div className="text-center mb-8">
