@@ -37,7 +37,7 @@ const Sidebar = ({ user, isOpen = true, onToggle }) => {
       {!isOpen && (
         <button 
           onClick={onToggle}
-          className="fixed top-4 left-4 z-50 p-2 bg-white rounded-xl shadow-lg border border-gray-200 sm:hidden"
+          className="fixed top-4 right-4 z-50 p-2 bg-white rounded-xl shadow-lg border border-gray-200 sm:hidden"
         >
           <Menu className="h-5 w-5 text-gray-600" />
         </button>
@@ -49,30 +49,16 @@ const Sidebar = ({ user, isOpen = true, onToggle }) => {
       {/* Logo */}
       <div className="p-4 border-b border-gray-200">
         {isOpen ? (
-          <div className="flex items-center justify-between">
-            <Link to="/dashboard" className="flex items-center gap-3">
-              <img src={trustBridgeLogo} alt="TrustBridge Logo" className="h-10 w-auto" />
-              <div>
-                <span className="text-xl font-black text-blue-600">TrustBridge</span>
-                <div className="text-xs text-gray-500 font-semibold -mt-1">NDPR COMPLIANCE</div>
-              </div>
-            </Link>
-            <button 
-              onClick={onToggle}
-              className="p-2 rounded-xl hover:bg-gray-100 transition-all duration-200"
-            >
-              <Menu className="h-5 w-5 text-gray-600" />
-            </button>
-          </div>
+          <Link to="/dashboard" className="flex items-center gap-3">
+            <img src={trustBridgeLogo} alt="TrustBridge Logo" className="h-10 w-auto" />
+            <div>
+              <span className="text-xl font-black text-blue-600">TrustBridge</span>
+              <div className="text-xs text-gray-500 font-semibold -mt-1">NDPR COMPLIANCE</div>
+            </div>
+          </Link>
         ) : (
-          <div className="w-full flex flex-col items-center gap-3">
+          <div className="w-full flex justify-center">
             <img src={trustBridgeLogo} alt="TrustBridge Logo" className="h-8 w-auto" />
-            <button 
-              onClick={onToggle}
-              className="p-2 rounded-xl hover:bg-gray-100 transition-all duration-200"
-            >
-              <Menu className="h-4 w-4 text-gray-600" />
-            </button>
           </div>
         )}
       </div>
@@ -84,7 +70,10 @@ const Sidebar = ({ user, isOpen = true, onToggle }) => {
             <Link
               key={item.path}
               to={item.path}
-              onClick={startNavigation}
+              onClick={() => {
+                startNavigation();
+                if (window.innerWidth < 640) onToggle();
+              }}
               className={`flex items-center ${isOpen ? 'gap-3 px-3 sm:px-4' : 'justify-center px-1 sm:px-2'} py-2 sm:py-3 rounded-xl font-semibold transition-all duration-200 text-sm sm:text-base ${
                 isActive(item.path)
                   ? 'bg-blue-600 text-white'
