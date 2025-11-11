@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Layout from './components/Layout';
 import Homepage from './pages/Homepage';
@@ -19,8 +19,14 @@ import Remediation from './pages/Remediation';
 import Certificate from './pages/Certificate';
 import DSRManagement from './pages/DSRManagement';
 import CitizenRequest from './pages/CitizenRequest';
+import QuickCompliance from './pages/QuickCompliance';
+import SystemStatus from './pages/SystemStatus';
 import Login from './pages/Login';
-import Signup from './pages/Signup';
+import Register from './pages/Register';
+import ConsentManagement from './pages/ConsentManagement';
+import ActionHistory from './pages/ActionHistory';
+import APIService from './services/api';
+import MockAuthService from './services/mockAuth';
 import Notifications from './pages/Notifications';
 import ProtectedRoute from './components/ProtectedRoute';
 import { NavigationProvider, useNavigation } from './contexts/NavigationContext';
@@ -28,18 +34,54 @@ import NavigationLoader from './components/NavigationLoader';
 
 const AppContent = () => {
   const { isNavigating } = useNavigation();
-  const [user, setUser] = useState({
-    id: 1,
-    name: 'Chidi Okonkwo',
-    email: 'chidi@example.com',
-    isLoggedIn: false
-  });
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    APIService.clearAuthToken();
+    MockAuthService.clearAuthToken();
+    setUser(null);
+    setSidebarOpen(false);
+  };
   
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 1024);
   
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setSidebarOpen(true);
+      } else {
+        setSidebarOpen(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
   
 
 
@@ -50,9 +92,9 @@ const AppContent = () => {
       <div className="app">
         {isNavigating && <NavigationLoader />}
         <Routes>
-          <Route path="/" element={<Homepage user={user} setUser={setUser} />} />
-          <Route path="/login" element={<Login onLogin={(data) => setUser({...user, ...data, isLoggedIn: true})} />} />
-          <Route path="/signup" element={<Signup onSignup={(data) => setUser({...user, ...data, isLoggedIn: true})} />} />
+          <Route path="/" element={<Homepage />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="/signup" element={!user ? <Register onLogin={handleLogin} /> : <Navigate to="/dashboard" />} />
           <Route path="/notifications" element={
             <ProtectedRoute>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
@@ -62,12 +104,12 @@ const AppContent = () => {
             </ProtectedRoute>
           } />
           <Route path="/companies" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+            <>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
                 <Companies />
               </Layout>
-            </ProtectedRoute>
+            </>
           } />
           <Route path="/register-company" element={
             <ProtectedRoute>
@@ -95,12 +137,12 @@ const AppContent = () => {
           } />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/policy-upload" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+            <>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
                 <PolicyUpload />
               </Layout>
-            </ProtectedRoute>
+            </>
           } />
           <Route path="/compliance-score" element={<ComplianceScore />} />
           <Route path="/remediation" element={<Remediation />} />
@@ -123,7 +165,7 @@ const AppContent = () => {
           } />
           <Route path="/dashboard" element={
             <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
                 <Dashboard user={user} />
               </Layout>
@@ -158,6 +200,38 @@ const AppContent = () => {
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
                 <RequestDetail user={user} />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/quick-compliance" element={
+            <ProtectedRoute>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <QuickCompliance />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/system-status" element={
+            <ProtectedRoute>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <SystemStatus />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/consent-management" element={
+            <ProtectedRoute>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <ConsentManagement />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/action-history" element={
+            <ProtectedRoute>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <ActionHistory user={user} />
               </Layout>
             </ProtectedRoute>
           } />

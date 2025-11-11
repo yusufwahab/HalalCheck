@@ -11,7 +11,7 @@ import KudaLogo from '../assets/Kuda_logo.png';
 import InterswitchLogo from '../assets/interswitch_logo.jpg';
 import GTBankLogo from '../assets/Gtbank_logo.png';
 
-const Homepage = ({ user, setUser }) => {
+const Homepage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [animatedStats, setAnimatedStats] = useState({ companies: 0, compliance: 0, connections: 0 });
   const [visibleSections, setVisibleSections] = useState(new Set());
@@ -56,9 +56,7 @@ const Homepage = ({ user, setUser }) => {
     };
   }, []);
 
-  const handleLogin = () => {
-    setUser({ ...user, isLoggedIn: true });
-  };
+
 
   return (
     <div className="min-h-screen bg-white">

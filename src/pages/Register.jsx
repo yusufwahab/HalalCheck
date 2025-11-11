@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { UserPlus, Mail, Lock, User, Building2, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import APIService from '../services/api';
 
 
-const Login = ({ onLogin }) => {
-  const [formData, setFormData] = useState({ email: '', password: '' });
+const Register = ({ onLogin }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,19 +22,40 @@ const Login = ({ onLogin }) => {
     setError('');
 
     try {
-      const response = await APIService.login(formData.email, formData.password);
-      const user = await APIService.getCurrentUser();
-      console.log('🎉 LOGIN SUCCESSFUL!');
-      console.log('Token:', response.access_token);
-      console.log('User Details:', user);
-      onLogin(user);
-      navigate('/dashboard');
+      const response = await APIService.registerUser(formData);
+      console.log('🎉 SIGNUP SUCCESSFUL!');
+      console.log('User registered:', response);
+      setSuccess(true);
+      setTimeout(() => navigate('/login'), 2000);
     } catch (error) {
-      setError('Invalid email or password');
+      setError('Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
+
+  if (success) {
+    return (
+      <div 
+        className="min-h-screen flex items-center justify-center p-4"
+        style={{ 
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/src/assets/Trustbridge_authpages_img.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="h-8 w-8 text-green-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Registration Successful!</h2>
+          <p className="text-gray-600 mb-4">You have signed up successfully. Redirecting to login...</p>
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div 
@@ -44,10 +70,10 @@ const Login = ({ onLogin }) => {
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-xl mb-4">
-            <LogIn className="h-8 w-8 text-white" />
+            <UserPlus className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
-          <p className="text-gray-600">Sign in to your TrustBridge account</p>
+          <h1 className="text-2xl font-bold text-gray-900">Create Account</h1>
+          <p className="text-gray-600">Join TrustBridge today</p>
         </div>
 
         {error && (
@@ -57,6 +83,21 @@ const Login = ({ onLogin }) => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter your full name"
+              />
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
             <div className="relative">
@@ -82,7 +123,7 @@ const Login = ({ onLogin }) => {
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter your password"
+                placeholder="Create a password"
               />
               <button
                 type="button"
@@ -94,20 +135,22 @@ const Login = ({ onLogin }) => {
             </div>
           </div>
 
+
+
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 
         <div className="mt-6 text-center">
           <p className="text-gray-600">
-            Don't have an account?{' '}
-            <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
-              Sign up
+            Already have an account?{' '}
+            <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+              Sign in
             </Link>
           </p>
         </div>
@@ -116,4 +159,4 @@ const Login = ({ onLogin }) => {
   );
 };
 
-export default Login;
+export default Register;

@@ -1,10 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Building2, FileText, BarChart3, Shield, Users, LogOut, Menu, PlusCircle } from 'lucide-react';
+import { Home, Building2, FileText, BarChart3, Shield, Users, LogOut, Menu, PlusCircle, Zap, Activity } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import trustBridgeLogo from '../assets/TrustBridgeLogo.png';
 import { useNavigation } from '../contexts/NavigationContext';
 
-const Sidebar = ({ user, isOpen = true, onToggle }) => {
+const Sidebar = ({ user, isOpen = true, onToggle, onLogout }) => {
   const location = useLocation();
   const { startNavigation } = useNavigation();
 
@@ -22,13 +22,16 @@ const Sidebar = ({ user, isOpen = true, onToggle }) => {
   }, [isOpen, onToggle]);
 
   const navItems = [
-    { path: '/', label: 'Home', icon: Home },
     { path: '/dashboard', label: 'Dashboard', icon: BarChart3 },
     { path: '/companies', label: 'Companies', icon: Building2 },
     { path: '/data-connections', label: 'My Data', icon: Shield },
+    { path: '/consent-management', label: 'Consent Control', icon: Shield },
+    { path: '/citizen-request', label: 'Data Rights', icon: Users },
     { path: '/register-company', label: 'Register Company', icon: PlusCircle },
     { path: '/policy-upload', label: 'Policy Upload', icon: FileText },
-    { path: '/citizen-request', label: 'Data Rights', icon: Users },
+    { path: '/quick-compliance', label: 'Quick Check', icon: Zap },
+    { path: '/action-history', label: 'Action History', icon: Activity },
+    { path: '/system-status', label: 'System Status', icon: Activity },
   ];
 
   return (
@@ -49,16 +52,30 @@ const Sidebar = ({ user, isOpen = true, onToggle }) => {
       {/* Logo */}
       <div className="p-4 border-b border-gray-200">
         {isOpen ? (
-          <Link to="/dashboard" className="flex items-center gap-3">
-            <img src={trustBridgeLogo} alt="TrustBridge Logo" className="h-10 w-auto" />
-            <div>
-              <span className="text-xl font-black text-blue-600">TrustBridge</span>
-              <div className="text-xs text-gray-500 font-semibold -mt-1">NDPR COMPLIANCE</div>
-            </div>
-          </Link>
+          <div className="flex items-center justify-between">
+            <Link to="/dashboard" className="flex items-center gap-3">
+              <img src={trustBridgeLogo} alt="TrustBridge Logo" className="h-10 w-auto" />
+              <div>
+                <span className="text-xl font-black text-blue-600">TrustBridge</span>
+                <div className="text-xs text-gray-500 font-semibold -mt-1">NDPR COMPLIANCE</div>
+              </div>
+            </Link>
+            <button 
+              onClick={onToggle}
+              className="hidden lg:flex p-2 rounded-xl hover:bg-gray-100 transition-all duration-200"
+            >
+              <Menu className="h-5 w-5 text-gray-600" />
+            </button>
+          </div>
         ) : (
-          <div className="w-full flex justify-center">
+          <div className="w-full flex flex-col items-center gap-3">
             <img src={trustBridgeLogo} alt="TrustBridge Logo" className="h-8 w-auto" />
+            <button 
+              onClick={onToggle}
+              className="hidden lg:flex p-2 rounded-xl hover:bg-gray-100 transition-all duration-200"
+            >
+              <Menu className="h-4 w-4 text-gray-600" />
+            </button>
           </div>
         )}
       </div>
@@ -101,19 +118,25 @@ const Sidebar = ({ user, isOpen = true, onToggle }) => {
                 <div className="text-xs text-gray-500">NDPR Platform</div>
               </div>
             </div>
-            <Link to="/" className="w-full flex items-center gap-3 px-4 py-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-xl font-semibold transition-all duration-200">
+            <button 
+              onClick={onLogout}
+              className="w-full flex items-center gap-3 px-4 py-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-xl font-semibold transition-all duration-200"
+            >
               <LogOut className="h-4 w-4" />
               <span className="text-sm">Sign Out</span>
-            </Link>
+            </button>
           </>
         ) : (
           <div className="flex flex-col items-center gap-2">
             <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
               <Users className="h-5 w-5 text-white" />
             </div>
-            <Link to="/" className="p-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all duration-200">
+            <button 
+              onClick={onLogout}
+              className="p-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all duration-200"
+            >
               <LogOut className="h-4 w-4" />
-            </Link>
+            </button>
           </div>
         )}
       </div>

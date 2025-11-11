@@ -3,6 +3,16 @@ import { Upload, Award, Shield, AlertTriangle, CheckCircle, Clock, FileText, Bui
 import { useState, useEffect } from 'react';
 
 const Dashboard = ({ user }) => {
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
   const complianceScore = 78;
   const pendingRequests = 3;
   const totalCompanies = 2;
@@ -77,7 +87,7 @@ const Dashboard = ({ user }) => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
             <div>
               <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-gray-900 mb-1 sm:mb-2">
-                Welcome, <span className="text-blue-600">{user.name}</span>
+                Welcome, <span className="text-blue-600">{user?.name || 'User'}</span>
               </h1>
               <p className="text-sm sm:text-lg text-gray-600">Manage <span className="text-blue-600 font-semibold">NDPR compliance</span></p>
             </div>
