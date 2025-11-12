@@ -1,0 +1,392 @@
+import React from 'react';
+import { Shield, AlertTriangle, CheckCircle, XCircle, Clock, FileText, Award, Brain, Users, Lock, Eye, Download } from 'lucide-react';
+
+const NDPRComplianceReport = ({ analysisResult, onClose }) => {
+  if (!analysisResult) return null;
+
+  const getComplianceScore = () => analysisResult.compliance_score || 0;
+  
+  const getComplianceTier = () => {
+    const score = getComplianceScore();
+    if (score < 50) return { tier: 'HIGH RISK', color: 'red', bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-800' };
+    if (score < 65) return { tier: 'MODERATE COMPLIANCE', color: 'yellow', bg: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-800' };
+    if (score < 80) return { tier: 'GOOD COMPLIANCE', color: 'blue', bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-800' };
+    return { tier: 'EXCELLENT COMPLIANCE', color: 'green', bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-800' };
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'compliant': return <CheckCircle className="h-5 w-5 text-green-600" />;
+      case 'partial': return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
+      case 'non_compliant': return <XCircle className="h-5 w-5 text-red-600" />;
+      default: return <AlertTriangle className="h-5 w-5 text-gray-400" />;
+    }
+  };
+
+  const getSeverityColor = (severity) => {
+    switch (severity?.toLowerCase()) {
+      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+      case 'high': return 'bg-red-100 text-red-800 border-red-200';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'low': return 'bg-green-100 text-green-800 border-green-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  const complianceTier = getComplianceTier();
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4 bg-black bg-opacity-50">
+      <div className="bg-white rounded-3xl max-w-6xl w-full max-h-[95vh] overflow-y-auto shadow-2xl">
+        {/* Header */}
+        <div className="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-3xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+                <Shield className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black text-gray-900">NDPR Compliance Analysis Report</h2>
+                <p className="text-gray-600">{analysisResult.company_name}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors">
+                <Download className="h-4 w-4" />
+                Download
+              </button>
+              <button 
+                onClick={onClose}
+                className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 space-y-8">
+          {/* Executive Summary & Score */}
+          <div className="grid lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <div className={`${complianceTier.bg} ${complianceTier.border} border rounded-2xl p-6`}>
+                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <Award className="h-6 w-6 text-blue-600" />
+                  Executive Summary
+                </h3>
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  {analysisResult.executive_summary}
+                </p>
+                <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${complianceTier.bg} ${complianceTier.text} border ${complianceTier.border}`}>
+                  {complianceTier.tier}
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              {/* Compliance Score */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center">
+                <div className="relative w-24 h-24 mx-auto mb-4">
+                  <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" stroke="#e5e7eb" strokeWidth="8" fill="none" />
+                    <circle
+                      cx="50" cy="50" r="40"
+                      stroke={complianceTier.color === 'red' ? '#ef4444' : complianceTier.color === 'yellow' ? '#f59e0b' : complianceTier.color === 'blue' ? '#3b82f6' : '#10b981'}
+                      strokeWidth="8" fill="none"
+                      strokeDasharray={`${2 * Math.PI * 40}`}
+                      strokeDashoffset={`${2 * Math.PI * 40 * (1 - getComplianceScore() / 100)}`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-2xl font-black text-gray-900">{getComplianceScore()}%</span>
+                  </div>
+                </div>
+                <h4 className="font-bold text-gray-900">Compliance Score</h4>
+              </div>
+
+              {/* Quick Stats */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-4">
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <div className="text-2xl font-bold text-red-600">{analysisResult.contradictions?.length || 0}</div>
+                    <div className="text-xs text-gray-600">Violations</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-yellow-600">{analysisResult.gaps?.length || 0}</div>
+                    <div className="text-xs text-gray-600">Gaps</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 8 Core Principles Analysis */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <Shield className="h-6 w-6 text-blue-600" />
+              8 Core NDPR Principles Assessment
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              {analysisResult.principle_analysis && Object.entries(analysisResult.principle_analysis).map(([key, value]) => (
+                <div key={key} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+                  {getStatusIcon(value.status)}
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-gray-900 capitalize mb-1">
+                      {key.replace(/_/g, ' ')}
+                    </h4>
+                    <p className="text-sm text-gray-600">{value.finding}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Lawful Basis Assessment */}
+          {analysisResult.lawful_basis_assessment && (
+            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <FileText className="h-6 w-6 text-blue-600" />
+                Lawful Basis Assessment
+              </h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <div className="space-y-3">
+                    <div>
+                      <span className="text-sm font-medium text-gray-500">Identified Basis:</span>
+                      <div className="text-gray-900 font-semibold">{analysisResult.lawful_basis_assessment.identified_basis}</div>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-500">Is Justified:</span>
+                      <div className={`inline-flex px-2 py-1 rounded text-sm font-medium ${
+                        analysisResult.lawful_basis_assessment.is_justified === 'yes' ? 'bg-green-100 text-green-800' :
+                        analysisResult.lawful_basis_assessment.is_justified === 'no' ? 'bg-red-100 text-red-800' :
+                        'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {analysisResult.lawful_basis_assessment.is_justified}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="space-y-3">
+                    <div>
+                      <span className="text-sm font-medium text-gray-500">Contradictions:</span>
+                      <div className="text-gray-700 text-sm">{analysisResult.lawful_basis_assessment.contradictions}</div>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-500">Recommendation:</span>
+                      <div className="text-blue-700 text-sm font-medium">{analysisResult.lawful_basis_assessment.recommendation}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Data Subject Rights */}
+          {analysisResult.data_subject_rights && (
+            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Users className="h-6 w-6 text-blue-600" />
+                Data Subject Rights Compliance
+              </h3>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {Object.entries(analysisResult.data_subject_rights).filter(([key]) => key !== 'contradictions').map(([key, value]) => (
+                  <div key={key} className="text-center p-4 bg-gray-50 rounded-xl">
+                    <div className="mb-2">
+                      {value === 'yes' ? 
+                        <CheckCircle className="h-8 w-8 text-green-600 mx-auto" /> :
+                        <XCircle className="h-8 w-8 text-red-600 mx-auto" />
+                      }
+                    </div>
+                    <h4 className="font-semibold text-gray-900 text-sm capitalize mb-1">
+                      {key.replace(/_/g, ' ')}
+                    </h4>
+                    <div className={`text-xs px-2 py-1 rounded ${value === 'yes' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                      {value}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {analysisResult.data_subject_rights.contradictions && (
+                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl">
+                  <p className="text-red-700 text-sm">{analysisResult.data_subject_rights.contradictions}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Critical Contradictions */}
+          {analysisResult.contradictions && analysisResult.contradictions.length > 0 && (
+            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <AlertTriangle className="h-6 w-6 text-red-600" />
+                Critical Contradictions ({analysisResult.contradictions.length})
+              </h3>
+              <div className="space-y-4">
+                {analysisResult.contradictions.map((contradiction, index) => (
+                  <div key={index} className="border border-red-200 rounded-xl p-4 bg-red-50">
+                    <div className="flex items-start gap-3">
+                      <div className={`px-2 py-1 rounded text-xs font-bold border ${getSeverityColor(contradiction.severity)}`}>
+                        {contradiction.severity}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-gray-900 mb-2">{contradiction.contradiction}</h4>
+                        <div className="grid md:grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <span className="font-medium text-gray-700">NDPR Requirement:</span>
+                            <p className="text-gray-600">{contradiction.ndpr_requirement}</p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-700">Current Policy:</span>
+                            <p className="text-gray-600">{contradiction.current_policy_states}</p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-700">Why It Contradicts:</span>
+                            <p className="text-gray-600">{contradiction.why_contradicts}</p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-700">Required Fix:</span>
+                            <p className="text-blue-700 font-medium">{contradiction.remediation_required}</p>
+                          </div>
+                        </div>
+                        <div className="mt-3 p-3 bg-white rounded-lg border">
+                          <span className="font-medium text-gray-700">Impact:</span>
+                          <p className="text-gray-600 text-sm">{contradiction.impact}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Compliance Gaps */}
+          {analysisResult.gaps && analysisResult.gaps.length > 0 && (
+            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Eye className="h-6 w-6 text-yellow-600" />
+                Compliance Gaps ({analysisResult.gaps.length})
+              </h3>
+              <div className="space-y-4">
+                {analysisResult.gaps.map((gap, index) => (
+                  <div key={index} className="border border-gray-200 rounded-xl p-4">
+                    <div className="flex items-start gap-3">
+                      <div className={`px-2 py-1 rounded text-xs font-bold border ${getSeverityColor(gap.severity)}`}>
+                        {gap.severity}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-gray-900 mb-2">{gap.title}</h4>
+                        <p className="text-gray-600 mb-3">{gap.description}</p>
+                        <div className="grid md:grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <span className="font-medium text-gray-700">NDPR Articles:</span>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {gap.ndpr_articles?.map((article, i) => (
+                                <span key={i} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                                  {article}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-700">Impact:</span>
+                            <p className="text-gray-600">{gap.impact}</p>
+                          </div>
+                        </div>
+                        <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                          <span className="font-medium text-blue-800">Recommendation:</span>
+                          <p className="text-blue-700 text-sm">{gap.recommendation}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Remediation Action Plan */}
+          {analysisResult.remediation_plan && (
+            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Clock className="h-6 w-6 text-blue-600" />
+                Remediation Action Plan
+              </h3>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {Object.entries(analysisResult.remediation_plan).map(([timeframe, actions]) => (
+                  <div key={timeframe} className="bg-gray-50 rounded-xl p-4">
+                    <h4 className="font-bold text-gray-900 mb-3 capitalize">
+                      {timeframe.replace('_', ' ')}
+                    </h4>
+                    <ul className="space-y-2">
+                      {actions.map((action, index) => (
+                        <li key={index} className="text-sm text-gray-600 flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                          {action}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Compliance Certification */}
+          {analysisResult.compliance_certification && (
+            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Award className="h-6 w-6 text-blue-600" />
+                Compliance Certification
+              </h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${
+                    analysisResult.compliance_certification.status === 'CERTIFIED' ? 'bg-green-100 text-green-800' :
+                    analysisResult.compliance_certification.status === 'CONDITIONALLY CERTIFIED' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {analysisResult.compliance_certification.status}
+                  </div>
+                </div>
+                <div>
+                  <span className="text-sm font-medium text-gray-500">Next Steps:</span>
+                  <p className="text-gray-700 text-sm">{analysisResult.compliance_certification.next_steps}</p>
+                </div>
+                <div>
+                  <span className="text-sm font-medium text-gray-500">Auditor Notes:</span>
+                  <p className="text-gray-700 text-sm">{analysisResult.compliance_certification.auditor_notes}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Legal References */}
+          {analysisResult.legal_references && analysisResult.legal_references.length > 0 && (
+            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <FileText className="h-6 w-6 text-gray-600" />
+                Legal References
+              </h3>
+              <div className="space-y-3">
+                {analysisResult.legal_references.map((ref, index) => (
+                  <div key={index} className="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50">
+                    <div className="font-semibold text-gray-900">{ref.regulation} - {ref.article}</div>
+                    <div className="text-sm text-gray-600 font-medium">{ref.title}</div>
+                    <div className="text-sm text-gray-500 mt-1">{ref.summary}</div>
+                    <div className="text-xs text-blue-600 mt-1">Relevance: {ref.relevance}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default NDPRComplianceReport;

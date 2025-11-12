@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Upload, FileText, CheckCircle, AlertTriangle, Shield, Eye, Download, ArrowRight, Volume2, VolumeX, Mic, Square, Trash2, Play, Search, FileCheck, Brain, Award, Clock } from 'lucide-react';
 import APIService from '../services/api';
+import GroqAIService from '../services/groqAI';
+import NDPRAnalysisService from '../services/ndprAnalysis';
 import MockAuthService from '../services/mockAuth';
+import NDPRComplianceReport from '../components/NDPRComplianceReport';
 
 const AnalysisProgress = ({ onTimeout, onCancel }) => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -167,13 +170,13 @@ const PolicyUpload = () => {
           };
           
           try {
-            const result = await APIService.analyzePolicy(analysisData);
+            const result = await NDPRAnalysisService.performComprehensiveNDPRAnalysis(analysisData);
             setAnalysisResult(result);
             setIsAnalyzing(false);
             setAnalysisComplete(true);
           } catch (error) {
-            console.error('Analysis failed:', error);
-            setError('Failed to analyze policy. Please try again.');
+            console.error('NDPR analysis failed:', error);
+            setError('Failed to analyze policy against NDPR requirements. Please try again.');
             setIsAnalyzing(false);
           }
         };
@@ -203,9 +206,9 @@ const PolicyUpload = () => {
           processing_scope: 'Standard data processing',
           target_users: 'General Public'
         };
-        const result = await APIService.analyzePolicy(analysisData);
+        const result = await NDPRAnalysisService.performComprehensiveNDPRAnalysis(analysisData);
         const processingTime = Date.now() - startTime;
-        console.log(`Analysis completed in ${processingTime}ms`);
+        console.log(`NDPR analysis completed in ${processingTime}ms`);
         setAnalysisResult(result);
         setIsAnalyzing(false);
         setAnalysisComplete(true);
@@ -305,7 +308,7 @@ const PolicyUpload = () => {
           target_users: 'General Public'
         };
         
-        const result = await APIService.analyzePolicy(analysisData);
+        const result = await NDPRAnalysisService.performComprehensiveNDPRAnalysis(analysisData);
         setAnalysisResult(result);
         setIsAnalyzing(false);
         setAnalysisComplete(true);
@@ -429,7 +432,7 @@ const PolicyUpload = () => {
                             className="w-full flex items-center justify-center gap-3 p-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200"
                           >
                             <Shield className="h-5 w-5" />
-                            Analyze Policy with AI
+                Analyze Against NDPR Requirements
                             <ArrowRight className="h-5 w-5" />
                           </button>
                         </div>
@@ -572,7 +575,7 @@ const PolicyUpload = () => {
                             <CheckCircle className="h-10 w-10 text-green-600" />
                           </div>
                           <h3 className="text-3xl font-black text-gray-900 mb-4">
-                            AI Analysis <span className="text-blue-600">Complete</span>
+                            NDPR Analysis <span className="text-blue-600">Complete</span>
                           </h3>
                           <div className="flex items-center justify-center gap-4 mb-6">
                             <div className="text-center">
@@ -628,7 +631,7 @@ const PolicyUpload = () => {
                             className="flex-1 flex items-center justify-center gap-3 p-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all duration-200"
                           >
                             <Eye className="h-5 w-5" />
-                            View Detailed Report
+                            View NDPR Compliance Report
                           </button>
                           <button className="flex items-center justify-center gap-3 p-4 bg-gray-100 text-gray-700 rounded-2xl font-bold hover:bg-gray-200 transition-all duration-200">
                             <Download className="h-5 w-5" />
@@ -728,175 +731,12 @@ const PolicyUpload = () => {
             </div>
           )}
 
-          {/* Detailed Report Modal */}
+          {/* NDPR Compliance Report Modal */}
           {showDetailedReport && analysisResult && (
-            <div className="fixed inset-0 flex items-center justify-center z-50 animate-fadeIn p-4">
-              <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-slideUp shadow-2xl">
-                <div className="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-3xl">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-black text-gray-900">Detailed NDPR Compliance Report</h2>
-                    <button 
-                      onClick={() => setShowDetailedReport(false)}
-                      className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="p-6 space-y-6">
-                  {/* Executive Summary */}
-                  <div className="bg-blue-50 rounded-2xl p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <Award className="h-6 w-6 text-blue-600" />
-                      Executive Summary
-                    </h3>
-                    <p className="text-gray-700 leading-relaxed">
-                      {analysisResult.executive_summary || 'Your privacy policy has been analyzed against NDPR requirements. The analysis reveals key areas for improvement to ensure full compliance with Nigerian data protection regulations.'}
-                    </p>
-                  </div>
-
-                  {/* Compliance Score Breakdown */}
-                  <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <Shield className="h-6 w-6 text-blue-600" />
-                      Compliance Score: {getComplianceScore()}%
-                    </h3>
-                    
-                    {(() => {
-                      const level = getComplianceLevel(getComplianceScore());
-                      return (
-                        <div className={`p-4 rounded-xl mb-4 ${
-                          level.color === 'red' ? 'bg-red-50 border border-red-200' :
-                          level.color === 'yellow' ? 'bg-yellow-50 border border-yellow-200' :
-                          level.color === 'blue' ? 'bg-blue-50 border border-blue-200' :
-                          'bg-green-50 border border-green-200'
-                        }`}>
-                          <div className={`text-lg font-bold mb-2 ${
-                            level.color === 'red' ? 'text-red-800' :
-                            level.color === 'yellow' ? 'text-yellow-800' :
-                            level.color === 'blue' ? 'text-blue-800' :
-                            'text-green-800'
-                          }`}>
-                            {level.level}
-                          </div>
-                          <div className={`text-sm ${
-                            level.color === 'red' ? 'text-red-700' :
-                            level.color === 'yellow' ? 'text-yellow-700' :
-                            level.color === 'blue' ? 'text-blue-700' :
-                            'text-green-700'
-                          }`}>
-                            {level.description}
-                          </div>
-                        </div>
-                      );
-                    })()}
-                    
-                    <div className="w-full bg-gray-200 rounded-full h-4 mb-4">
-                      <div 
-                        className={`h-4 rounded-full transition-all duration-1000 ${
-                          getComplianceScore() < 50 ? 'bg-gradient-to-r from-red-500 to-red-600' :
-                          getComplianceScore() < 70 ? 'bg-gradient-to-r from-yellow-500 to-yellow-600' :
-                          getComplianceScore() < 80 ? 'bg-gradient-to-r from-blue-500 to-blue-600' :
-                          'bg-gradient-to-r from-green-500 to-green-600'
-                        }`}
-                        style={{ width: `${getComplianceScore()}%` }}
-                      ></div>
-                    </div>
-                    
-                    <div className="grid grid-cols-3 gap-4 text-center">
-                      <div className="p-3 bg-green-50 rounded-xl">
-                        <div className="text-2xl font-bold text-green-600">{analysisResult.gaps?.filter(g => g.severity === 'low').length || 0}</div>
-                        <div className="text-sm text-green-700">Low Risk</div>
-                      </div>
-                      <div className="p-3 bg-yellow-50 rounded-xl">
-                        <div className="text-2xl font-bold text-yellow-600">{analysisResult.gaps?.filter(g => g.severity === 'medium').length || 0}</div>
-                        <div className="text-sm text-yellow-700">Medium Risk</div>
-                      </div>
-                      <div className="p-3 bg-red-50 rounded-xl">
-                        <div className="text-2xl font-bold text-red-600">{analysisResult.gaps?.filter(g => g.severity === 'high').length || 0}</div>
-                        <div className="text-sm text-red-700">High Risk</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Detailed Analysis */}
-                  <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <Brain className="h-6 w-6 text-blue-600" />
-                      Detailed Analysis
-                    </h3>
-                    <p className="text-gray-700 leading-relaxed">
-                      {analysisResult.detailed_analysis || 'Comprehensive analysis of your privacy policy against NDPR requirements has been completed. The assessment covers data collection practices, consent mechanisms, data subject rights, and security measures.'}
-                    </p>
-                  </div>
-
-                  {/* Compliance Gaps */}
-                  {analysisResult.gaps && analysisResult.gaps.length > 0 && (
-                    <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <AlertTriangle className="h-6 w-6 text-red-600" />
-                        Compliance Gaps
-                      </h3>
-                      <div className="space-y-4">
-                        {analysisResult.gaps.map((gap, index) => (
-                          <div key={index} className="border border-gray-200 rounded-xl p-4">
-                            <div className="flex items-start gap-3">
-                              <div className={`w-3 h-3 rounded-full mt-2 ${
-                                gap.severity === 'high' ? 'bg-red-500' :
-                                gap.severity === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-                              }`}></div>
-                              <div className="flex-1">
-                                <h4 className="font-bold text-gray-900 mb-2">{gap.title}</h4>
-                                <p className="text-gray-600 mb-3">{gap.description}</p>
-                                <div className="text-sm text-blue-600 font-medium">
-                                  Impact: {gap.impact}
-                                </div>
-                                {gap.recommendation && (
-                                  <div className="mt-2 p-3 bg-blue-50 rounded-lg">
-                                    <div className="text-sm font-medium text-blue-800">Recommendation:</div>
-                                    <div className="text-sm text-blue-700">{gap.recommendation}</div>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Legal Context */}
-                  {analysisResult.legal_context && (
-                    <div className="bg-gray-50 rounded-2xl p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <FileText className="h-6 w-6 text-gray-600" />
-                        Legal Context
-                      </h3>
-                      <p className="text-gray-700 leading-relaxed">
-                        {analysisResult.legal_context}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Legal References */}
-                  {analysisResult.legal_references && analysisResult.legal_references.length > 0 && (
-                    <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-4">Legal References</h3>
-                      <div className="space-y-3">
-                        {analysisResult.legal_references.map((ref, index) => (
-                          <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
-                            <div className="font-semibold text-gray-900">{ref.regulation} - {ref.article}</div>
-                            <div className="text-sm text-gray-600">{ref.title}</div>
-                            <div className="text-sm text-gray-500 mt-1">{ref.summary}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            <NDPRComplianceReport 
+              analysisResult={analysisResult}
+              onClose={() => setShowDetailedReport(false)}
+            />
           )}
     </div>
   );

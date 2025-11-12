@@ -1,5 +1,4 @@
 const BACKEND_URL = 'https://trustbridge-backend-v75r.onrender.com';
-const AI_ENGINE_URL = 'https://trustbridge-ai-engine.onrender.com';
 
 class APIService {
   constructor() {
@@ -80,29 +79,10 @@ class APIService {
     return this.request(`/companies/${companyId}`);
   }
 
-  // Policy analysis
+  // Policy analysis - now handled by GROQ AI service
   async analyzePolicy(policyData) {
-    const url = `${AI_ENGINE_URL}/api/v1/analyze/policy`;
-    const config = {
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'omit',
-      headers: this.getHeaders(),
-      body: JSON.stringify(policyData),
-    };
-
-    try {
-      const response = await fetch(url, config);
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('AI Engine Error:', response.status, errorText);
-        throw new Error(`AI Engine Error: ${response.status}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('AI analysis failed:', error);
-      throw error;
-    }
+    // This method is deprecated - use GroqAIService directly
+    throw new Error('Use GroqAIService.analyzePolicy() instead');
   }
 
   // Consent management
