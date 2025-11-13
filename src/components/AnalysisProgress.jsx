@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, FileCheck, Brain, Award, Clock } from 'lucide-react';
 
-const AnalysisProgress = ({ onCancel }) => {
+const AnalysisProgress = ({ progress = 0, onCancel, onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [progress, setProgress] = useState(0);
   const [showTimeout, setShowTimeout] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const hasStarted = useRef(false);
 
   const steps = [
     { icon: Search, title: 'Scanning Document', description: 'Reading and parsing your privacy policy' },
@@ -15,6 +15,24 @@ const AnalysisProgress = ({ onCancel }) => {
   ];
 
   useEffect(() => {
+    console.log('AnalysisProgress useEffect called, hasStarted:', hasStarted.current);
+    
+    // Prevent multiple calls in development mode
+    if (hasStarted.current) {
+      console.log('Analysis already started, returning');
+      return;
+    }
+    hasStarted.current = true;
+    
+    console.log('Starting analysis timeout...');
+    // Start actual analysis immediately
+    setTimeout(() => {
+      console.log('Timeout reached, calling onComplete');
+      if (onComplete) {
+        onComplete();
+      }
+    }, 100);
+    
     const timer = setInterval(() => {
       setElapsedTime(prev => prev + 100);
       
@@ -22,12 +40,7 @@ const AnalysisProgress = ({ onCancel }) => {
         setShowTimeout(true);
       }
       
-      setProgress(prev => {
-        if (prev < 90) {
-          return prev + Math.random() * 3;
-        }
-        return prev;
-      });
+      // Progress is now controlled by parent component
     }, 100);
 
     const stepTimer = setInterval(() => {
@@ -38,7 +51,7 @@ const AnalysisProgress = ({ onCancel }) => {
       clearInterval(timer);
       clearInterval(stepTimer);
     };
-  }, [elapsedTime, showTimeout]);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -57,8 +70,11 @@ const AnalysisProgress = ({ onCancel }) => {
           <span className="text-sm font-semibold text-gray-700">{Math.round(progress)}% Complete</span>
           <span className="text-xs text-gray-500">This may take 30-60 seconds</span>
         </div>
-        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-300 ease-out" style={{ width: `${progress}%` }}></div>
+        <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-500 ease-out animate-pulse" 
+            style={{ width: `${progress}%` }}
+          ></div>
         </div>
       </div>
 

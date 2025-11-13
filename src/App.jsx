@@ -116,7 +116,6 @@ const AppContent = () => {
             <ProtectedRoute>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <TopNavbar />
                 <Dashboard user={user} />
               </Layout>
             </ProtectedRoute>
@@ -126,7 +125,6 @@ const AppContent = () => {
             <ProtectedRoute>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <TopNavbar />
                 <Notifications />
               </Layout>
             </ProtectedRoute>
@@ -136,7 +134,6 @@ const AppContent = () => {
             <>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <TopNavbar />
                 <Companies />
               </Layout>
             </>
@@ -146,7 +143,6 @@ const AppContent = () => {
             <ProtectedRoute>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <TopNavbar />
                 <DataUsageMonitor />
               </Layout>
             </ProtectedRoute>
@@ -156,7 +152,6 @@ const AppContent = () => {
             <ProtectedRoute>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <TopNavbar />
                 <RealTimeDataUsage />
               </Layout>
             </ProtectedRoute>
@@ -166,7 +161,6 @@ const AppContent = () => {
             <ProtectedRoute>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <TopNavbar />
                 <History />
               </Layout>
             </ProtectedRoute>
@@ -176,7 +170,6 @@ const AppContent = () => {
             <ProtectedRoute>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <TopNavbar />
                 <Settings />
               </Layout>
             </ProtectedRoute>
@@ -186,7 +179,6 @@ const AppContent = () => {
             <ProtectedRoute>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <TopNavbar />
                 <UserProfile />
               </Layout>
             </ProtectedRoute>
@@ -196,7 +188,6 @@ const AppContent = () => {
             <>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <TopNavbar />
                 <PolicyUpload />
               </Layout>
             </>
@@ -206,7 +197,6 @@ const AppContent = () => {
             <ProtectedRoute>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <TopNavbar />
                 <ActionHistory user={user} />
               </Layout>
             </ProtectedRoute>

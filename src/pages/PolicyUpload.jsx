@@ -36,36 +36,30 @@ const PolicyUpload = () => {
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
-    if (file) {
+    if (file && !isAnalyzing && !showAnalysisModal) {
       setUploadedFile(file);
       setShowAnalysisModal(true);
     }
   };
 
   const handleTextSubmit = async () => {
-    if (policyText.trim()) {
+    console.log('handleTextSubmit called');
+    if (policyText.trim() && !isAnalyzing && !showAnalysisModal) {
+      console.log('Opening analysis modal');
       setShowAnalysisModal(true);
     }
   };
 
   const handleAnalysisComplete = async () => {
-    // Auto-complete analysis after 5 seconds
-    setTimeout(() => {
-      setShowAnalysisModal(false);
-      setIsAnalyzing(false);
-      setAnalysisComplete(true);
-      setAnalysisResult({
-        compliance_score: 72,
-        risk_level: 'medium',
-        issues: [
-          { severity: 'high', type: 'data_retention', title: 'DATA RETENTION', description: 'No clear data retention policy specified' },
-          { severity: 'medium', type: 'consent', title: 'CONSENT MECHANISM', description: 'Consent mechanism needs explicit user approval' },
-          { severity: 'low', type: 'transparency', title: 'TRANSPARENCY', description: 'Additional transparency recommended' }
-        ]
-      });
-    }, 5000);
-    return;
+    console.log('handleAnalysisComplete called, isAnalyzing:', isAnalyzing);
     
+    // Prevent multiple calls
+    if (isAnalyzing) {
+      console.log('Analysis already in progress, returning');
+      return;
+    }
+    
+    console.log('Starting analysis...');
     setShowAnalysisModal(false);
     setIsAnalyzing(true);
     setError(null);
@@ -75,6 +69,7 @@ const PolicyUpload = () => {
       let text = '';
       
       if (uploadedFile) {
+        console.log('Processing uploaded file:', uploadedFile.name);
         if (uploadedFile.type === 'application/pdf') {
           setProgress(20);
           const pdfResult = await extractTextFromPDF(uploadedFile);
@@ -95,13 +90,34 @@ const PolicyUpload = () => {
           setProgress(40);
         }
       } else if (policyText.trim()) {
+        console.log('Using policy text, length:', policyText.length);
         text = policyText.trim();
         setProgress(40);
       } else if (audioBlob) {
+        console.log('Processing audio blob');
         setProgress(20);
         text = await GroqAIService.transcribeAudio(audioBlob);
         setProgress(40);
       }
+      
+      if (!text.trim()) {
+        throw new Error('No text content found to analyze');
+      }
+      
+      // Check if text is actually a policy document
+      const policyKeywords = ['privacy', 'policy', 'data', 'personal', 'information', 'collect', 'process', 'consent', 'protection', 'gdpr', 'ndpr', 'terms', 'service'];
+      const textLower = text.toLowerCase();
+      const hasKeywords = policyKeywords.some(keyword => textLower.includes(keyword));
+      
+      // Check if it's error logs, code, or unrelated content
+      const nonPolicyIndicators = ['error:', 'exception:', 'stack trace', 'console.log', 'function', 'undefined', 'null', 'react', 'javascript', 'html', 'css'];
+      const hasNonPolicyContent = nonPolicyIndicators.some(indicator => textLower.includes(indicator));
+      
+      if (!hasKeywords || hasNonPolicyContent) {
+        throw new Error('What you entered does not have to do with policy, please input an actual policy');
+      }
+      
+      console.log('Text extracted, length:', text.length);
       
       const analysisData = {
         company_name: 'User Company',
@@ -113,15 +129,18 @@ const PolicyUpload = () => {
         target_users: 'General Public'
       };
       
+      console.log('Calling NDPR analysis API...');
       setProgress(60);
       const result = await NDPRAnalysisService.performComprehensiveNDPRAnalysis(analysisData);
+      console.log('Analysis complete, result:', result);
+      
       setProgress(100);
       setAnalysisResult(result);
       setIsAnalyzing(false);
       setAnalysisComplete(true);
     } catch (error) {
       console.error('Analysis failed:', error);
-      setError('Failed to analyze policy. Please try again.');
+      setError(error.message || 'Failed to analyze policy. Please try again.');
       setIsAnalyzing(false);
       setProgress(0);
     }
@@ -185,7 +204,7 @@ const PolicyUpload = () => {
   };
 
   const analyzeVoice = async () => {
-    if (audioBlob) {
+    if (audioBlob && !isAnalyzing && !showAnalysisModal) {
       setShowAnalysisModal(true);
     }
   };
@@ -205,20 +224,30 @@ const PolicyUpload = () => {
     setError(null);
     setProgress(0);
     setRecordingTime(0);
+    setIsAnalyzing(false);
+    setShowAnalysisModal(false);
+    setShowDetailedReport(false);
+    
+    // Clear file inputs
+    const fileInputs = document.querySelectorAll('input[type="file"]');
+    fileInputs.forEach(input => input.value = '');
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
+        {/* Header - Hidden when analysis is complete */}
+        {!analysisComplete && (
         <div className="mb-8">
-          <h1 className="text-4xl font-black text-gray-900 mb-4">
+          <h1 className="text-2xl sm:text-4xl font-black text-gray-900 mb-4">
             Policy <span className="text-blue-600">Analysis</span>
           </h1>
-          <p className="text-xl text-gray-600">Upload your privacy policy for AI-powered NDPR compliance analysis</p>
+          <p className="text-lg sm:text-xl text-gray-600">Upload your privacy policy for AI-powered NDPR compliance analysis</p>
         </div>
+        )}
 
-        {/* Tabs */}
+        {/* Tabs - Hidden when analysis is complete */}
+        {!analysisComplete && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 mb-8">
           <div className="flex border-b border-gray-200">
             {tabs.map((tab) => (
@@ -250,13 +279,21 @@ const PolicyUpload = () => {
                     className="w-full h-64 p-6 border-2 border-gray-300 rounded-2xl focus:border-blue-500 focus:outline-none resize-none text-gray-700"
                   />
                 </div>
-                <button
-                  onClick={handleTextSubmit}
-                  disabled={!policyText.trim() || isAnalyzing}
-                  className="px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200 mx-auto block"
-                >
-                  Analyze
-                </button>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <button
+                    onClick={handleTextSubmit}
+                    disabled={!policyText.trim() || isAnalyzing || showAnalysisModal}
+                    className="flex-1 sm:flex-none px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200"
+                  >
+                    {isAnalyzing || showAnalysisModal ? 'Analyzing...' : 'Analyze Policy'}
+                  </button>
+                  <button
+                    onClick={() => setPolicyText('')}
+                    className="flex-1 sm:flex-none px-8 py-4 bg-gray-100 text-gray-700 rounded-2xl font-bold hover:bg-gray-200 transition-all duration-200"
+                  >
+                    Clear Text
+                  </button>
+                </div>
               </div>
             )}
 
@@ -366,10 +403,11 @@ const PolicyUpload = () => {
                         </button>
                         <button
                           onClick={analyzeVoice}
-                          className="px-4 py-2 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all duration-200"
+                          disabled={isAnalyzing || showAnalysisModal}
+                          className="px-4 py-2 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200"
                         >
                           <ArrowRight className="h-4 w-4 inline mr-2" />
-                          Analyze
+                          {isAnalyzing || showAnalysisModal ? 'Analyzing...' : 'Analyze'}
                         </button>
                         <button
                           onClick={() => {
@@ -389,113 +427,147 @@ const PolicyUpload = () => {
             )}
           </div>
         </div>
-
-        {/* Analysis Progress */}
-        {isAnalyzing && (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8">
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Analyzing Policy</h3>
-              <p className="text-gray-600">AI is analyzing your policy against NDPR requirements...</p>
-            </div>
-            
-            <div className="w-full bg-gray-200 rounded-full h-4 mb-4">
-              <div 
-                className="bg-blue-600 h-4 rounded-full transition-all duration-500"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-            
-            <div className="text-center">
-              <span className="text-lg font-bold text-blue-600">{progress}% Complete</span>
-            </div>
-          </div>
         )}
 
-        {/* Analysis Results */}
+
+
+        {/* Analysis Results - Replaces entire page content */}
         {analysisComplete && analysisResult && (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8">
-            <div className="text-center mb-8">
-              <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">Analysis Complete</h3>
-              <div className="flex items-center justify-center gap-8">
-                <div className="text-center">
-                  <div className="relative w-24 h-24 mx-auto mb-4">
-                    <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
-                      <circle cx="50" cy="50" r="40" stroke="#e5e7eb" strokeWidth="8" fill="none" />
-                      <circle
-                        cx="50" cy="50" r="40"
-                        stroke={(
-                          (analysisResult.compliance_score || 78) >= 80 ? '#10b981' :
-                          (analysisResult.compliance_score || 78) >= 60 ? '#f59e0b' : '#ef4444'
-                        )}
-                        strokeWidth="8" fill="none"
-                        strokeDasharray={`${2 * Math.PI * 40}`}
-                        strokeDashoffset={`${2 * Math.PI * 40 * (1 - (analysisResult.compliance_score || 78) / 100)}`}
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-2xl font-black text-gray-900">{analysisResult.compliance_score || 78}%</span>
-                    </div>
-                  </div>
-                  <div className="text-sm font-semibold text-gray-600">Compliance Score</div>
+          <div className="space-y-6">
+            {/* Header */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-black text-gray-900 mb-2">NDPR Compliance Report</h1>
+                  <p className="text-gray-600">Analysis completed on {new Date().toLocaleDateString()}</p>
                 </div>
-                <div className="text-center">
-                  <div className={`px-4 py-2 rounded-full text-sm font-bold ${
-                    (analysisResult.risk_level || 'medium') === 'low' ? 'bg-green-100 text-green-800' :
-                    (analysisResult.risk_level || 'medium') === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    {(analysisResult.risk_level || 'MEDIUM').toUpperCase()} RISK
-                  </div>
-                </div>
+                <button 
+                  onClick={resetAll}
+                  className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition-all duration-200 w-full sm:w-auto"
+                >
+                  New Analysis
+                </button>
               </div>
             </div>
 
-            <div className="flex gap-4">
+            {/* Score Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 text-center">
+                <div className="relative w-20 h-20 mx-auto mb-4">
+                  <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="35" stroke="#e5e7eb" strokeWidth="10" fill="none" />
+                    <circle
+                      cx="50" cy="50" r="35"
+                      stroke={(
+                        (analysisResult.compliance_score || 0) >= 80 ? '#10b981' :
+                        (analysisResult.compliance_score || 0) >= 60 ? '#f59e0b' : '#ef4444'
+                      )}
+                      strokeWidth="10" fill="none"
+                      strokeDasharray={`${2 * Math.PI * 35}`}
+                      strokeDashoffset={`${2 * Math.PI * 35 * (1 - (analysisResult.compliance_score || 0) / 100)}`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-xl font-black text-gray-900">{analysisResult.compliance_score || 0}%</span>
+                  </div>
+                </div>
+                <h3 className="font-bold text-gray-900 mb-1">Compliance Score</h3>
+                <p className="text-sm text-gray-600">Overall NDPR compliance</p>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 text-center">
+                <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                  (analysisResult.risk_level || 'medium') === 'low' ? 'bg-green-100' :
+                  (analysisResult.risk_level || 'medium') === 'medium' ? 'bg-yellow-100' :
+                  'bg-red-100'
+                }`}>
+                  <AlertTriangle className={`h-8 w-8 ${
+                    (analysisResult.risk_level || 'medium') === 'low' ? 'text-green-600' :
+                    (analysisResult.risk_level || 'medium') === 'medium' ? 'text-yellow-600' :
+                    'text-red-600'
+                  }`} />
+                </div>
+                <h3 className="font-bold text-gray-900 mb-1">{(analysisResult.risk_level || 'Medium').toUpperCase()} Risk</h3>
+                <p className="text-sm text-gray-600">Compliance risk level</p>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 text-center">
+                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FileCheck className="h-8 w-8 text-blue-600" />
+                </div>
+                <h3 className="font-bold text-gray-900 mb-1">{analysisResult.gaps?.length || 3} Issues</h3>
+                <p className="text-sm text-gray-600">Compliance gaps found</p>
+              </div>
+            </div>
+
+            {/* Key Issues */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Key Compliance Issues</h2>
+              <div className="space-y-4">
+                {(analysisResult.gaps || [
+                  { title: 'Data Retention Policy', severity: 'High', description: 'No clear data retention policy specified' },
+                  { title: 'Consent Mechanism', severity: 'Medium', description: 'Consent mechanism needs explicit user approval' },
+                  { title: 'Transparency Requirements', severity: 'Low', description: 'Additional transparency recommended' }
+                ]).slice(0, 3).map((issue, index) => (
+                  <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                    <div className={`px-3 py-1 rounded-full text-xs font-bold w-fit ${
+                      issue.severity === 'Critical' || issue.severity === 'High' ? 'bg-red-100 text-red-800' :
+                      issue.severity === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-green-100 text-green-800'
+                    }`}>
+                      {issue.severity}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-gray-900">{issue.title}</h3>
+                      <p className="text-sm text-gray-600">{issue.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-col sm:flex-row gap-4">
               <button 
                 onClick={() => setShowDetailedReport(true)}
                 className="flex-1 flex items-center justify-center gap-3 p-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all duration-200"
               >
                 <Eye className="h-5 w-5" />
-                View Detailed Report
+                View Full Report
               </button>
               <button 
-                onClick={resetAll}
-                className="px-6 py-4 bg-gray-100 text-gray-700 rounded-2xl font-bold hover:bg-gray-200 transition-all duration-200"
+                className="flex-1 flex items-center justify-center gap-3 p-4 bg-green-600 text-white rounded-2xl font-bold hover:bg-green-700 transition-all duration-200"
               >
-                New Analysis
+                <Download className="h-5 w-5" />
+                Download PDF
               </button>
             </div>
           </div>
         )}
 
-        {/* Error Display */}
+        {/* Error Modal */}
         {error && (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center">
-            <AlertTriangle className="h-16 w-16 text-red-600 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Analysis Failed</h3>
-            <p className="text-red-600 mb-6">{error}</p>
-            <button
-              onClick={() => {
-                setError(null);
-                resetAll();
-              }}
-              className="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all duration-200"
-            >
-              Try Again
-            </button>
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-8 text-center max-w-md mx-4">
+              <AlertTriangle className="h-16 w-16 text-red-600 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Analysis Failed</h3>
+              <p className="text-red-600 mb-6">{error}</p>
+              <button
+                onClick={() => setError(null)}
+                className="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all duration-200"
+              >
+                Try Again
+              </button>
+            </div>
           </div>
         )}
 
         {/* Analysis Modal */}
-        {showAnalysisModal && (
+        {(showAnalysisModal || isAnalyzing) && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm">
             <div className="bg-white rounded-3xl p-8 max-w-4xl w-full mx-4 shadow-2xl animate-in fade-in zoom-in duration-300">
-              <AnalysisProgress onCancel={() => setShowAnalysisModal(false)} />
+              <AnalysisProgress progress={progress} onCancel={() => { setShowAnalysisModal(false); setIsAnalyzing(false); }} onComplete={handleAnalysisComplete} />
             </div>
           </div>
         )}

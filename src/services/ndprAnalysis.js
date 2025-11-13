@@ -2,7 +2,7 @@ class NDPRAnalysisService {
   constructor() {
     this.apiKey = import.meta.env.VITE_GROQ_API_KEY;
     this.groqApiUrl = "https://api.groq.com/openai/v1/chat/completions";
-    this.model = "openai/gpt-oss-120b";
+    this.model = "openai/gpt-oss-20b";
     this.voiceModel = "whisper-large-v3";
     this.pdfVisionModel = "meta-llama/llama-4-scout-17b-16e-instruct";
   }
@@ -15,127 +15,17 @@ class NDPRAnalysisService {
   }
 
   async performComprehensiveNDPRAnalysis(policyData) {
-    const systemPrompt = `You are an expert NDPR (Nigeria Data Protection Act 2023 - GAID 2025) compliance auditor. Your role is to analyze policies, documents, and data processing statements provided by users and evaluate them against the Nigeria Data Protection Act framework.
+    console.log('NDPRAnalysisService.performComprehensiveNDPRAnalysis called with:', policyData);
+    
+    const systemPrompt = `You are an NDPR compliance auditor. Analyze the privacy policy against Nigerian Data Protection Act requirements.
 
-ANALYSIS FRAMEWORK:
-Use this NDPR compliance framework as your reference:
+Key Requirements:
+- 8 Core Principles: Fairness, Purpose Limitation, Data Minimization, Storage Limitation, Accuracy, Security, Accountability, Duty of Care
+- Lawful Bases: Consent, Contract, Legal Obligation, Vital Interest, Public Interest, Legitimate Interest
+- Data Subject Rights: Access, Rectification, Erasure, Portability, Complaint
+- Mandatory for >200 users: DPO, DPIA, breach notification, training
 
-**8 Core Principles (Non-Negotiable):**
-1. Fairness, Lawfulness, Transparency
-2. Purpose Limitation (specified, explicit, legitimate purposes only)
-3. Data Minimization (adequate, relevant, minimum necessary)
-4. Storage Limitation (retain only as long as necessary; max 6 months default)
-5. Data Accuracy (complete, not misleading, kept up-to-date)
-6. Confidentiality, Integrity, Availability (CIA triad)
-7. Accountability (records, responsive, compliant)
-8. Duty of Care (professional, ethical, prevent harm)
-
-**6 Lawful Bases for Processing:**
-- Consent (freely given, informed, specific, not detrimental if refused)
-- Contract (necessary for performance with data subject)
-- Legal Obligation (specific law, court order, or legal duty - minimum scope)
-- Vital Interest (preserve/protect life/livelihood when consent impossible)
-- Public Interest (emergency, public safety, humanitarian)
-- Legitimate Interest (must pass balancing test - requires Legitimate Interest Assessment)
-
-**Mandatory Obligations for Major Importance Entities (>200 data subjects in 6 months):**
-- Register as UHL (>5000), EHL (>1000), or OHL (>200)
-- Designate certified Data Protection Officer (DPO)
-- File annual Compliance Audit Returns (CAR) by March 31st
-- Conduct Data Privacy Impact Assessment (DPIA) where required
-- Maintain Data Processing Agreements (DPA) with third-party processors
-- Display privacy notices on homepage; conspicuous cookie notices
-- Notify Commission of breaches within 72 hours
-- Notify data subjects immediately if high-risk breach
-- Conduct annual staff training on data protection
-
-**Mandatory Consent Required For:**
-- Direct marketing activities
-- Sensitive personal data processing
-- Incompatible further processing
-- Child data or incapacity data
-- Cross-border transfer to non-adequate countries
-- Automated decision-making with legal effects
-- Cookies (except necessary/functional cookies)
-
-**DPIA Mandatory When:**
-- Profiling or scoring involved
-- Automated decision-making with legal/significant effects
-- Systematic monitoring of data subjects
-- Sensitive or highly personal data processed
-- Vulnerable data subjects involved
-- New/innovative technologies deployed
-- Surveillance systems implemented
-- Cross-border data transfers
-- Large-scale public data processing
-
-**Data Subject Rights (Non-Waivable):**
-- Right to Access (DSAR - within reasonable timeframe)
-- Right to Rectification (correct errors without cost)
-- Right to Data Portability (receive in structured format for consent/contract basis)
-- Right to Erasure (delete when no longer needed, consent withdrawn, unlawful)
-- Right to Lodge Complaint (with NDPC - acknowledged within 7 days)
-- Right to SNAG (Standard Notice to Address Grievance - 30-day internal resolution)
-
-**Critical Prohibitions:**
-- Processing child data without parental/guardian consent/approval
-- Automated sole-basis decisions without consent or lawful derogation
-- Discriminatory profiling or algorithmic bias
-- Cross-border transfer without adequacy decision or approved instrument
-- Processing beyond purpose limitation
-- Retaining data beyond storage limitation (except legal defense)
-- Lack of transparency/privacy notices
-- No Data Protection Officer for major importance entities
-- Inadequate security measures (CIA controls missing)
-- Non-compliance with data subject access requests
-- Late breach notification (>72 hours)
-- Operating without DPA with third-party processors
-
-Perform comprehensive analysis following these steps:
-
-**STEP 1: IDENTIFY CONTRADICTIONS**
-- Scan the document against all 8 principles
-- Check against 6 lawful bases - is one clearly identified?
-- Verify consent requirements are met where mandatory
-- Confirm DPIA is conducted if required
-- Validate data retention periods (max 6 months default)
-- Check for data subject rights acknowledgment
-
-**STEP 2: FLAG VIOLATIONS**
-For each violation found, state:
-- Which NDPR requirement it violates
-- The specific article/section
-- Severity (Critical/High/Medium/Low)
-- Impact on data subjects
-- Required remediation
-
-**STEP 3: ASSESS COMPLIANCE GAPS**
-- Missing DPO designation (if applicable)
-- No DPA with processors
-- Inadequate privacy notices
-- No breach notification procedure
-- Missing training schedules
-- No DPIA (when required)
-- Vague purposes
-- Over-collection of data
-- Unclear retention periods
-- Weak security measures
-
-**STEP 4: GENERATE COMPLIANCE RATING**
-Calculate a compliance score (0-100%) based on:
-- Principle adherence (40% weight)
-- Lawful basis clarity (20% weight)
-- Consent/DPIA compliance (20% weight)
-- Data subject rights provisions (15% weight)
-- Operational measures (5% weight)
-
-**RATING TIERS:**
-- Below 50%: HIGH RISK - Critical violations, immediate remediation required
-- 50-65%: MODERATE COMPLIANCE - Significant gaps, remediation plan needed
-- 65-80%: GOOD COMPLIANCE - Minor gaps, improvements recommended
-- 80-100%: EXCELLENT COMPLIANCE - Meets/exceeds requirements
-
-Always respond with valid JSON format following the exact structure provided.`;
+Provide compliance score (0-100%), risk level, gaps, and recommendations in JSON format.`;
 
     const userPrompt = `**NDPR COMPLIANCE ANALYSIS REQUEST**
 
@@ -250,41 +140,99 @@ Respond in JSON format with the following structure:
   "timestamp": "string"
 }`;
 
-    try {
-      const startTime = Date.now();
-      const response = await fetch(this.groqApiUrl, {
-        method: 'POST',
-        headers: this.getHeaders(),
-        body: JSON.stringify({
-          model: this.model,
-          messages: [
-            {
-              role: "system",
-              content: systemPrompt
-            },
-            {
-              role: "user",
-              content: userPrompt
-            }
-          ],
-          temperature: 0.1,
-          max_tokens: 8000
-        })
-      });
+    const makeRequest = async (retryCount = 0) => {
+      try {
+        console.log(`Making API request to GROQ... (attempt ${retryCount + 1})`);
+        const startTime = Date.now();
+        const response = await fetch(this.groqApiUrl, {
+          method: 'POST',
+          headers: this.getHeaders(),
+          body: JSON.stringify({
+            model: this.model,
+            messages: [
+              {
+                role: "system",
+                content: systemPrompt
+              },
+              {
+                role: "user",
+                content: userPrompt
+              }
+            ],
+            temperature: 0.1,
+            max_tokens: 4000
+          })
+        });
 
-      if (!response.ok) {
-        throw new Error(`GROQ API Error: ${response.status}`);
+        console.log('API response status:', response.status);
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('API error response:', errorText);
+          
+          // Check if it's a rate limit error
+          if (response.status === 429 && retryCount < 3) {
+            const waitTime = Math.pow(2, retryCount) * 1000 + Math.random() * 1000; // Exponential backoff
+            console.log(`Rate limited, waiting ${waitTime}ms before retry...`);
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+            return makeRequest(retryCount + 1);
+          }
+          
+          throw new Error(`GROQ API Error: ${response.status} - ${errorText}`);
+        }
+        
+        return response;
+      } catch (error) {
+        if (retryCount < 3 && (error.message.includes('rate_limit') || error.message.includes('429'))) {
+          const waitTime = Math.pow(2, retryCount) * 1000 + Math.random() * 1000;
+          console.log(`Error occurred, waiting ${waitTime}ms before retry...`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+          return makeRequest(retryCount + 1);
+        }
+        throw error;
       }
+    };
+
+    const startTime = Date.now();
+    
+    try {
+      const response = await makeRequest();
 
       const data = await response.json();
+      console.log('API response received, processing time:', Date.now() - startTime, 'ms');
       const processingTime = Date.now() - startTime;
       
       let analysisResult;
       try {
-        analysisResult = JSON.parse(data.choices[0].message.content);
+        let content = data.choices[0].message.content;
+        
+        // Remove markdown code blocks if present
+        if (content.includes('```json')) {
+          content = content.replace(/```json\s*/, '').replace(/\s*```$/, '');
+        }
+        if (content.includes('```')) {
+          content = content.replace(/```\s*/, '').replace(/\s*```$/, '');
+        }
+        
+        // Decode HTML entities
+        content = content.replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+        
+        // Extract complete JSON object
+        const jsonStart = content.indexOf('{');
+        const jsonEnd = content.lastIndexOf('}');
+        if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+          content = content.substring(jsonStart, jsonEnd + 1);
+        }
+        
+        analysisResult = JSON.parse(content.trim());
+        console.log('Analysis result parsed successfully');
       } catch (parseError) {
-        console.error('JSON parsing failed, using fallback:', parseError);
+        console.error('JSON parsing failed:', parseError);
+        console.error('Raw response length:', data.choices[0].message.content.length);
+        
+        // Use fallback analysis if parsing fails
+        const processingTime = Date.now() - startTime;
         analysisResult = this.generateFallbackAnalysis(policyData, processingTime);
+        console.log('Using fallback analysis due to parsing error');
       }
 
       // Ensure processing time is included
@@ -294,7 +242,7 @@ Respond in JSON format with the following structure:
       return analysisResult;
     } catch (error) {
       console.error('NDPR analysis failed:', error);
-      return this.generateFallbackAnalysis(policyData, 0);
+      throw error;
     }
   }
 
