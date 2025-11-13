@@ -152,14 +152,7 @@ const NITDAComplaint = () => {
 
   return (
     <div className="min-h-screen bg-blue-50">
-      <div className="lg:hidden fixed top-4 left-4 z-50">
-        <button
-          onClick={() => setSidebarOpen(true)}
-          className="bg-blue-600 text-white p-2 rounded-lg shadow-lg"
-        >
-          <Menu className="h-6 w-6" />
-        </button>
-      </div>
+
 
       <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
 

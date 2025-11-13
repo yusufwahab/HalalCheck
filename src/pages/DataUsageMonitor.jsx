@@ -157,13 +157,7 @@ const DataUsageMonitor = () => {
                 Monitor where, when, and how companies access your personal data
               </p>
             </div>
-            <Link 
-              to="/data-usage-monitor" 
-              className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg sm:rounded-xl font-bold hover:bg-blue-700 transition-all duration-200 gap-2 text-sm sm:text-base"
-            >
-              <Shield className="h-4 w-4 sm:h-5 sm:w-5" />
-              View Monitor
-            </Link>
+
           </div>
         </div>
 

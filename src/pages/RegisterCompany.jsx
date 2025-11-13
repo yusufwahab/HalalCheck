@@ -3,6 +3,7 @@ import { Building2, CheckCircle, Upload, Shield, Users, FileText, Globe, Phone, 
 
 const RegisterCompany = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     companyName: '',
     cacNumber: '',
@@ -363,6 +364,16 @@ const RegisterCompany = () => {
                           Choose File
                         </label>
                       </div>
+                      {formData.privacyPolicy && (
+                        <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-xl">
+                          <div className="flex items-center gap-2">
+                            <FileText className="h-5 w-5 text-green-600" />
+                            <span className="text-sm font-semibold text-green-800">
+                              {formData.privacyPolicy.name}
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -426,11 +437,11 @@ const RegisterCompany = () => {
                 )}
 
                 {/* Navigation Buttons */}
-                <div className="flex justify-between mt-10">
+                <div className="flex flex-col sm:flex-row justify-between gap-4 mt-10">
                   <button
                     onClick={prevStep}
                     disabled={currentStep === 1}
-                    className={`px-6 py-3 rounded-2xl font-bold transition-all duration-200 ${
+                    className={`px-4 sm:px-6 py-3 rounded-xl sm:rounded-2xl font-bold transition-all duration-200 text-sm sm:text-base ${
                       currentStep === 1
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -442,12 +453,15 @@ const RegisterCompany = () => {
                   {currentStep < 4 ? (
                     <button
                       onClick={nextStep}
-                      className="px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transform hover:scale-105 transition-all duration-200"
+                      className="px-4 sm:px-6 py-3 bg-blue-600 text-white rounded-xl sm:rounded-2xl font-bold hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 text-sm sm:text-base"
                     >
                       Next Step
                     </button>
                   ) : (
-                    <button className="px-8 py-3 bg-green-600 text-white rounded-2xl font-bold hover:bg-green-700 transform hover:scale-105 transition-all duration-200">
+                    <button 
+                      onClick={() => setShowModal(true)}
+                      className="px-4 sm:px-8 py-3 bg-green-600 text-white rounded-xl sm:rounded-2xl font-bold hover:bg-green-700 transform hover:scale-105 transition-all duration-200 text-sm sm:text-base"
+                    >
                       Submit Registration
                     </button>
                   )}
@@ -456,6 +470,39 @@ const RegisterCompany = () => {
             </div>
           </div>
       </div>
+
+      {/* Registration Review Modal */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-8 w-8 text-blue-600" />
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-4">
+                Registration Submitted Successfully
+              </h2>
+              <p className="text-gray-600 mb-6 text-sm sm:text-base">
+                Your company registration is being reviewed by our compliance team. You will receive a response within <strong>24-48 hours</strong> via email.
+              </p>
+              <div className="bg-blue-50 rounded-xl p-4 mb-6">
+                <p className="text-sm text-blue-800">
+                  <strong>What happens next:</strong><br/>
+                  • Verification of company documents<br/>
+                  • NDPR compliance assessment<br/>
+                  • Account activation email
+                </p>
+              </div>
+              <button
+                onClick={() => setShowModal(false)}
+                className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all text-sm sm:text-base"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

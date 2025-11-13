@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Building2, FileText, BarChart3, Shield, Users, LogOut, Menu, PlusCircle, Zap, Activity, Bell, Settings, User, Monitor, History, Eye, AlertTriangle } from 'lucide-react';
+import { Home, Building2, FileText, BarChart3, Shield, Users, LogOut, Menu, PlusCircle, Zap, Activity, Bell, Settings, User, Monitor, History, Eye, AlertTriangle, UserPlus } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import trustBridgeLogo from '../assets/TrustBridgeLogo.png';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -26,6 +26,7 @@ const Sidebar = ({ user, isOpen = true, onToggle, onLogout }) => {
     { path: '/companies', label: 'Companies', icon: Building2 },
     { path: '/data-connections', label: 'My Data', icon: Shield },
     { path: '/policy-upload', label: 'Policy Upload', icon: FileText },
+    { path: '/register-company', label: 'Register Company', icon: UserPlus },
     { path: '/nitda-complaint', label: 'File Complaint', icon: AlertTriangle },
     { path: '/action-history', label: 'Action History', icon: Activity },
     { path: '/settings', label: 'Settings', icon: Settings },

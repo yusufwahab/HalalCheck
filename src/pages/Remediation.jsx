@@ -74,37 +74,39 @@ function acceptAllCookies() {
   const currentIssue = issues[selectedIssue];
 
   return (
-    <div className="min-h-screen bg-dark-bg p-4">
-      <div className="max-w-6xl mx-auto pt-20">
+    <div className="min-h-screen bg-blue-50 p-3 sm:p-6">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-dark-text mb-4">Remediation Assistant</h1>
-          <p className="text-dark-text-secondary">Fix NDPR compliance issues with step-by-step guidance</p>
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 mb-3 sm:mb-4">
+            Fix <span className="text-blue-600">Issues</span>
+          </h1>
+          <p className="text-sm sm:text-base lg:text-lg text-gray-600">Fix NDPR compliance issues with step-by-step guidance</p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Issues Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="glass-effect rounded-2xl p-6">
-              <h3 className="text-lg font-bold text-dark-text mb-4">Issues to Fix</h3>
-              <div className="space-y-3">
+          <div className="w-full lg:col-span-1">
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-4">Issues to Fix</h3>
+              <div className="flex lg:flex-col gap-2 lg:gap-3 overflow-x-auto lg:overflow-x-visible">
                 {issues.map((issue, index) => (
                   <button
                     key={issue.id}
                     onClick={() => setSelectedIssue(index)}
-                    className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                    className={`flex-shrink-0 lg:w-full w-48 text-left p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all text-sm sm:text-base ${
                       selectedIssue === index
-                        ? 'border-brand-green bg-brand-green/10'
-                        : 'border-dark-border hover:border-brand-green/50'
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-blue-300'
                     } ${fixedIssues.has(issue.id) ? 'opacity-50' : ''}`}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold text-dark-text">{issue.title}</span>
+                      <span className="font-semibold text-gray-900">{issue.title}</span>
                       {fixedIssues.has(issue.id) && (
-                        <Check className="h-5 w-5 text-success" />
+                        <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
                       )}
                     </div>
-                    <p className="text-dark-text-secondary text-sm">{issue.article}</p>
+                    <p className="text-gray-600 text-xs sm:text-sm">{issue.article}</p>
                   </button>
                 ))}
               </div>
@@ -112,93 +114,93 @@ function acceptAllCookies() {
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-2">
-            <div className="glass-effect rounded-2xl p-8">
+          <div className="w-full lg:col-span-2">
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8 min-w-0">
               {/* Issue Header */}
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-dark-text mb-4">{currentIssue.title}</h2>
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="px-3 py-1 bg-error/20 text-error rounded-full text-sm font-medium">
+              <div className="mb-6 sm:mb-8">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">{currentIssue.title}</h2>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
+                  <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs sm:text-sm font-medium w-fit">
                     Critical
                   </span>
-                  <span className="text-brand-green font-medium">{currentIssue.article}</span>
+                  <span className="text-blue-600 font-medium text-sm sm:text-base">{currentIssue.article}</span>
                 </div>
-                <p className="text-dark-text-secondary">{currentIssue.description}</p>
+                <p className="text-gray-600 text-sm sm:text-base">{currentIssue.description}</p>
               </div>
 
               {/* Explanation */}
-              <div className="mb-8">
-                <div className="flex items-center gap-2 mb-4">
-                  <BookOpen className="h-5 w-5 text-brand-green" />
-                  <h3 className="text-lg font-semibold text-dark-text">Plain Explanation</h3>
+              <div className="mb-6 sm:mb-8">
+                <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                  <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">Plain Explanation</h3>
                 </div>
-                <div className="bg-dark-surface rounded-xl p-6">
-                  <p className="text-dark-text-secondary">{currentIssue.explanation}</p>
+                <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                  <p className="text-gray-700 text-sm sm:text-base">{currentIssue.explanation}</p>
                 </div>
               </div>
 
               {/* Recommended Fix */}
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-dark-text">Recommended Fix</h3>
+              <div className="mb-6 sm:mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-3 sm:mb-4">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">Recommended Fix</h3>
                   <button
                     onClick={() => handleCopy(currentIssue.fix, 'fix')}
-                    className="flex items-center gap-2 px-4 py-2 bg-brand-green/10 text-brand-green rounded-lg hover:bg-brand-green hover:text-white transition-colors"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-sm sm:text-base w-fit"
                   >
                     {copiedText === 'fix' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     {copiedText === 'fix' ? 'Copied!' : 'Copy Text'}
                   </button>
                 </div>
-                <div className="bg-dark-surface rounded-xl p-6">
-                  <pre className="text-dark-text whitespace-pre-wrap font-mono text-sm">
+                <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6 overflow-x-auto">
+                  <pre className="text-gray-800 whitespace-pre-wrap font-mono text-xs sm:text-sm break-words">
                     {currentIssue.fix}
                   </pre>
                 </div>
               </div>
 
               {/* Code Example */}
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
+              <div className="mb-6 sm:mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-3 sm:mb-4">
                   <div className="flex items-center gap-2">
-                    <Code className="h-5 w-5 text-brand-purple" />
-                    <h3 className="text-lg font-semibold text-dark-text">Code Example</h3>
+                    <Code className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900">Code Example</h3>
                   </div>
                   <button
                     onClick={() => handleCopy(currentIssue.codeExample, 'code')}
-                    className="flex items-center gap-2 px-4 py-2 bg-brand-purple/10 text-brand-purple rounded-lg hover:bg-brand-purple hover:text-white transition-colors"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-600 hover:text-white transition-colors text-sm sm:text-base w-fit"
                   >
                     {copiedText === 'code' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     {copiedText === 'code' ? 'Copied!' : 'Copy Code'}
                   </button>
                 </div>
-                <div className="bg-dark-surface rounded-xl p-6 overflow-x-auto">
-                  <pre className="text-dark-text font-mono text-sm">
+                <div className="bg-gray-900 rounded-lg sm:rounded-xl p-4 sm:p-6 overflow-x-auto">
+                  <pre className="text-gray-100 font-mono text-xs sm:text-sm whitespace-pre-wrap break-words">
                     <code>{currentIssue.codeExample}</code>
                   </pre>
                 </div>
               </div>
 
               {/* Actions */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <button
                   onClick={() => markAsFixed(currentIssue.id)}
                   disabled={fixedIssues.has(currentIssue.id)}
-                  className="flex items-center justify-center gap-2 px-6 py-3 bg-success text-white rounded-xl font-semibold hover:bg-success/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center justify-center gap-2 px-4 sm:px-6 py-3 bg-green-600 text-white rounded-lg sm:rounded-xl font-semibold hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                 >
-                  <Check className="h-5 w-5" />
+                  <Check className="h-4 w-4 sm:h-5 sm:w-5" />
                   {fixedIssues.has(currentIssue.id) ? 'Fixed' : 'Mark as Fixed'}
                 </button>
-                <button className="flex items-center justify-center gap-2 px-6 py-3 bg-dark-surface border border-dark-border text-dark-text rounded-xl hover:border-brand-green transition-colors">
-                  <RefreshCw className="h-5 w-5" />
+                <button className="flex items-center justify-center gap-2 px-4 sm:px-6 py-3 bg-gray-100 border border-gray-200 text-gray-700 rounded-lg sm:rounded-xl hover:border-blue-300 transition-colors text-sm sm:text-base">
+                  <RefreshCw className="h-4 w-4 sm:h-5 sm:w-5" />
                   Reanalyze Policy
                 </button>
                 {fixedIssues.size === issues.length && (
                   <button
                     onClick={() => navigate('/certificate')}
-                    className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-brand-green to-brand-blue text-white rounded-xl font-semibold hover:shadow-glow transition-all"
+                    className="flex items-center justify-center gap-2 px-4 sm:px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg sm:rounded-xl font-semibold hover:shadow-lg transition-all text-sm sm:text-base"
                   >
                     Generate Certificate
-                    <ArrowRight className="h-5 w-5" />
+                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
                   </button>
                 )}
               </div>
