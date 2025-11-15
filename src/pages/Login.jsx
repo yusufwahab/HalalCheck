@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import APIService from '../services/api';
+import AuthBg from '../assets/Trustbridge_authpages_img.png';
 
 
 const Login = ({ onLogin }) => {
@@ -35,7 +36,7 @@ const Login = ({ onLogin }) => {
     <div 
       className="min-h-screen flex items-center justify-center p-4"
       style={{ 
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/src/assets/Trustbridge_authpages_img.png')`,
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${AuthBg})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
