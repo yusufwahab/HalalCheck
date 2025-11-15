@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Building2, MapPin, Star, Shield, TrendingUp, Users, Award, CheckCircle, Loader2, Check, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
@@ -17,6 +17,7 @@ import GTBankLogo from '../assets/Gtbank_logo.png';
 import GTBankBuild from '../assets/GTBank_building.jpeg';
 
 const Companies = () => {
+  const navigate = useNavigate();
   const [connectionModal, setConnectionModal] = useState(null);
   const [connectionStep, setConnectionStep] = useState(1);
   const [foundData, setFoundData] = useState(null);
@@ -141,7 +142,7 @@ const Companies = () => {
   }
 
   function navigateToTracking() {
-    window.location.href = `/tracking/${trackingId}?company=${connectionModal.name}`;
+    navigate(`/tracking/${trackingId}?company=${connectionModal.name}`);
   }
 
   return (
