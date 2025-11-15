@@ -85,7 +85,7 @@ const Homepage = () => {
       <section 
         className="relative pt-20 sm:pt-24 lg:pt-32 pb-12 sm:pb-16 lg:pb-20 overflow-hidden"
         style={{ 
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(${AuthBg})`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${AuthBg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
@@ -99,7 +99,7 @@ const Homepage = () => {
               <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-gray-200 font-light">Simplified</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-4xl mx-auto leading-relaxed mb-8 sm:mb-12 px-4">
-              TrustBridge <span className="font-semibold text-blue-600">empowers</span> organizations and citizens with <span className="font-semibold text-blue-600">real-time</span> data usage alerts, AI-powered NDPR policy analysis, and actionable compliance insights, giving users <span className="font-semibold text-blue-600">control</span>, businesses clarity, and everyone <span className="font-semibold text-blue-600">confidence</span> in data privacy.
+              TrustBridge <span className="font-semibold text-cyan-400">empowers</span> organizations and citizens with <span className="font-semibold text-cyan-400">real-time</span> data usage alerts, AI-powered NDPR policy analysis, and actionable compliance insights, giving users <span className="font-semibold text-cyan-400">control</span>, businesses clarity, and everyone <span className="font-semibold text-cyan-400">confidence</span> in data privacy.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center mb-12 sm:mb-16 px-4">
               <Link 
