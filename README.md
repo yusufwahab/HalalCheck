@@ -1,22 +1,23 @@
-# TrustBridge - NDPR Compliance Platform
+# HalalCheck - AI-Powered Shariah Compliance for Modern Finance
 
-TrustBridge is an AI-powered platform that simplifies Nigerian Data Protection Regulation (NDPR) compliance for businesses and empowers citizens to control their data rights.
+HalalCheck is an AI-powered platform that analyzes financial products for Shariah compliance, helping 1.8 billion Muslims make confident halal financial decisions.
 
 ## 🚀 Features
 
-### Phase 1: Business Compliance (MVP)
-- **Quick Onboarding**: Business registration with CAC verification
-- **AI Policy Analysis**: Automated privacy policy scanning against NDPR requirements
-- **Compliance Scoring**: Real-time compliance assessment with detailed breakdown
-- **Remediation Assistant**: Step-by-step guidance to fix compliance issues
-- **Compliance Certificate**: Downloadable certificates and website badges
-- **DSR Management**: Handle citizen data requests efficiently
-- **Evidence Vault**: Maintain audit-ready compliance records
+### Phase 1: Financial Product Analysis (MVP)
+- **Instant Shariah Analysis**: Upload contracts, terms, or product links for AI analysis
+- **Halal Score (0-100)**: Clear rating with breakdown of riba, gharar, and haram elements
+- **Scholarly Proof**: Every decision backed by Quran, Hadith, and contemporary fatwas
+- **Halal Alternatives**: Recommends compliant substitutes when products fail
+- **HalalCheck Certified**: Downloadable certificates and website badges
+- **Business Dashboard**: API integration for fintech companies
+- **Scholar Network**: Access to certified Shariah advisors
 
-### Phase 2: Citizen Empowerment (Planned)
-- **Transparency Directory**: Search companies by compliance score
-- **Consent Control**: Manage data permissions across platforms
-- **Breach Notifications**: Automatic alerts for data breaches
+### Phase 2: Islamic Finance Ecosystem (Planned)
+- **Zakat Calculator**: Automated zakat calculation with live gold/silver prices
+- **Qard Hasan Marketplace**: Interest-free peer lending community
+- **Halal Income Purification**: Calculate charity amounts for mixed-income investments
+- **Halal Business Validator**: Shariah screening for entrepreneurs
 
 ## 🛠️ Tech Stack
 
@@ -28,19 +29,18 @@ TrustBridge is an AI-powered platform that simplifies Nigerian Data Protection R
 
 ## 📋 User Flows
 
-### Business Compliance Flow
-1. **Onboarding** → Business registration and verification
-2. **Policy Upload** → AI analysis of privacy policies
-3. **Compliance Score** → Instant NDPR compliance assessment
-4. **Remediation** → Fix issues with guided assistance
-5. **Certificate** → Generate compliance certificates
-6. **DSR Management** → Handle citizen data requests
-7. **Monitoring** → Ongoing compliance tracking
+### Individual User Flow
+1. **Product Analysis** → Upload financial contracts or product links
+2. **AI Analysis** → Instant Shariah compliance assessment
+3. **Halal Score** → 0-100 rating with detailed breakdown
+4. **Alternatives** → Discover compliant substitutes
+5. **Scholar Consultation** → Complex cases escalated to experts
 
-### Citizen Request Flow
-1. **Submit Request** → Access, correction, or erasure requests
-2. **Company Processing** → 30-day response timeline
-3. **Fulfillment** → Secure data delivery and proof generation
+### Business Integration Flow
+1. **API Integration** → Embed HalalCheck in fintech products
+2. **Real-time Validation** → Continuous compliance monitoring
+3. **Certification** → Earn "HalalCheck Certified" badge
+4. **Analytics** → Track compliance metrics and user trust
 
 ## 🚦 Getting Started
 
@@ -62,31 +62,35 @@ src/
 ├── components/          # Reusable UI components
 ├── pages/              # Main application pages
 │   ├── Homepage.jsx    # Landing page
-│   ├── Onboarding.jsx  # Business registration
-│   ├── PolicyUpload.jsx # AI policy analysis
-│   ├── ComplianceScore.jsx # Results display
-│   ├── Remediation.jsx # Issue fixing
-│   ├── Certificate.jsx # Compliance certificates
-│   ├── DSRManagement.jsx # Data subject requests
-│   └── CitizenRequest.jsx # Citizen request form
-├── data/               # Mock data and constants
+│   ├── Onboarding.jsx  # User type selection
+│   ├── ProductAnalysis.jsx # Financial product upload
+│   ├── HalalScore.jsx  # Shariah compliance results
+│   ├── Remediation.jsx # Product improvement guidance
+│   ├── Certificate.jsx # Shariah compliance certificates
+│   ├── BusinessDashboard.jsx # API management for companies
+│   ├── CheckProduct.jsx # Public product search
+│   ├── ZakatCalculator.jsx # Zakat calculation tool
+│   └── ScholarNetwork.jsx # Scholar consultations
+├── data/               # Mock data and Islamic finance constants
 └── App.jsx            # Main application component
 ```
 
 ## 🎯 Key Routes
 
 - `/` - Homepage with platform overview
-- `/onboarding` - Business registration flow
-- `/policy-upload` - Privacy policy analysis
-- `/compliance-score` - NDPR compliance results
-- `/remediation` - Issue remediation assistant
-- `/certificate` - Compliance certificate generation
-- `/dsr-management` - Data subject request management
-- `/citizen-request` - Citizen data request form
+- `/onboarding` - User type selection (Individual vs Business)
+- `/product-analysis` - Financial product analysis
+- `/halal-score` - Shariah compliance results
+- `/remediation` - Product improvement guidance
+- `/certificate` - Shariah compliance certificate generation
+- `/business-dashboard` - API keys and business management
+- `/check-product` - Public product search tool
+- `/zakat-calculator` - Zakat calculation and tracking
+- `/scholar-network` - Scholar consultations and rulings
 
 ## 🔧 Development
 
-The application uses React 19 with Vite for fast development and hot module replacement. Tailwind CSS provides utility-first styling with a custom dark theme.
+The application uses React 19 with Vite for fast development and hot module replacement. Tailwind CSS provides utility-first styling with Islamic design elements.
 
 ## 📜 License
 

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Building2, FileText, BarChart3, Shield, Users, LogOut, Menu, PlusCircle, Zap, Activity, Bell, Settings, User, Monitor, History, Eye, AlertTriangle, UserPlus, ToggleLeft, Share2, Calculator, Globe } from 'lucide-react';
+import { Home, Building2, FileText, BarChart3, Shield, Users, LogOut, Menu, PlusCircle, Zap, Activity, Bell, Settings, User, Monitor, History, Eye, AlertTriangle, UserPlus, ToggleLeft, Share2, Calculator, Globe, Star, Heart, DollarSign, BookOpen, Award } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import trustBridgeLogo from '../assets/TrustBridgeLogo.png';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -23,17 +23,17 @@ const Sidebar = ({ user, isOpen = true, onToggle, onLogout }) => {
 
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: BarChart3 },
-    { path: '/companies', label: 'Companies', icon: Building2 },
-    { path: '/data-connections', label: 'My Data', icon: Shield },
-    { path: '/consent-hub', label: 'Consent Hub', icon: ToggleLeft },
-    { path: '/data-flow-visualization', label: 'Data Flow', icon: Share2 },
-    { path: '/breach-response', label: 'Breach Alerts', icon: Bell },
-    { path: '/privacy-risk-calculator', label: 'Risk Calculator', icon: Calculator },
-    { path: '/cross-border-monitor', label: 'Cross-Border', icon: Globe },
-    { path: '/policy-upload', label: 'Policy Upload', icon: FileText },
-    { path: '/register-company', label: 'Register Company', icon: UserPlus },
-    { path: '/nitda-complaint', label: 'File Complaint', icon: AlertTriangle },
-    { path: '/action-history', label: 'Action History', icon: Activity },
+    { path: '/product-analysis', label: 'Check Product', icon: FileText },
+    { path: '/halal-score', label: 'Halal Score', icon: Award },
+    { path: '/zakat-calculator', label: 'Zakat Calculator', icon: Calculator },
+    { path: '/scholar-network', label: 'Scholar Network', icon: BookOpen },
+    { path: '/halal-alternatives', label: 'Halal Alternatives', icon: Heart },
+    { path: '/business-dashboard', label: 'Business API', icon: Building2 },
+    { path: '/qard-hasan', label: 'Qard Hasan', icon: DollarSign },
+    { path: '/income-purification', label: 'Income Purifier', icon: Shield },
+    { path: '/business-validator', label: 'Business Validator', icon: UserPlus },
+    { path: '/action-history', label: 'History', icon: Activity },
+    { path: '/notifications', label: 'Notifications', icon: Bell },
     { path: '/settings', label: 'Settings', icon: Settings },
   ];
 
@@ -57,10 +57,12 @@ const Sidebar = ({ user, isOpen = true, onToggle, onLogout }) => {
         {isOpen ? (
           <div className="flex items-center justify-between">
             <Link to="/dashboard" className="flex items-center gap-3">
-              <img src={trustBridgeLogo} alt="TrustBridge Logo" className="h-10 w-auto" />
+              <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl flex items-center justify-center">
+                <Star className="h-6 w-6 text-white" />
+              </div>
               <div>
-                <span className="text-xl font-black text-blue-600">TrustBridge</span>
-                <div className="text-xs text-gray-500 font-semibold -mt-1">NDPR COMPLIANCE</div>
+                <span className="text-xl font-black text-green-600">HalalCheck</span>
+                <div className="text-xs text-gray-500 font-semibold -mt-1">SHARIAH COMPLIANCE</div>
               </div>
             </Link>
             <button 
@@ -72,7 +74,9 @@ const Sidebar = ({ user, isOpen = true, onToggle, onLogout }) => {
           </div>
         ) : (
           <div className="w-full flex flex-col items-center gap-3">
-            <img src={trustBridgeLogo} alt="TrustBridge Logo" className="h-8 w-auto" />
+            <div className="w-8 h-8 bg-gradient-to-br from-green-600 to-emerald-700 rounded-xl flex items-center justify-center">
+              <Star className="h-5 w-5 text-white" />
+            </div>
             <button 
               onClick={onToggle}
               className="hidden lg:flex p-2 rounded-xl hover:bg-gray-100 transition-all duration-200"
@@ -96,8 +100,8 @@ const Sidebar = ({ user, isOpen = true, onToggle, onLogout }) => {
               }}
               className={`flex items-center ${isOpen ? 'gap-3 px-3 sm:px-4' : 'justify-center px-1 sm:px-2'} py-2 sm:py-3 rounded-xl font-semibold transition-all duration-200 text-sm sm:text-base ${
                 isActive(item.path)
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+                  ? 'bg-green-600 text-white'
+                  : 'text-gray-600 hover:bg-green-50 hover:text-green-600'
               }`}
               title={!isOpen ? item.label : ''}
             >
@@ -118,14 +122,14 @@ const Sidebar = ({ user, isOpen = true, onToggle, onLogout }) => {
                 startNavigation();
                 if (window.innerWidth < 640) onToggle();
               }}
-              className="flex items-center gap-3 p-3 bg-gray-50 hover:bg-blue-50 rounded-xl mb-2 transition-all duration-200 cursor-pointer"
+              className="flex items-center gap-3 p-3 bg-gray-50 hover:bg-green-50 rounded-xl mb-2 transition-all duration-200 cursor-pointer"
             >
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center">
                 <User className="h-5 w-5 text-white" />
               </div>
               <div className="flex-1">
                 <div className="text-sm font-bold text-gray-900">{user?.name || 'User'}</div>
-                <div className="text-xs text-gray-500">NDPR Platform</div>
+                <div className="text-xs text-gray-500">Shariah Platform</div>
               </div>
             </Link>
             <Link 
@@ -144,7 +148,7 @@ const Sidebar = ({ user, isOpen = true, onToggle, onLogout }) => {
                 startNavigation();
                 if (window.innerWidth < 640) onToggle();
               }}
-              className="w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-xl flex items-center justify-center transition-all duration-200 cursor-pointer"
+              className="w-10 h-10 bg-green-600 hover:bg-green-700 rounded-xl flex items-center justify-center transition-all duration-200 cursor-pointer"
               title="Profile"
             >
               <User className="h-5 w-5 text-white" />

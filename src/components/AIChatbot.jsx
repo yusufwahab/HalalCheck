@@ -8,7 +8,7 @@ const AIChatbot = () => {
     {
       id: 1,
       type: 'bot',
-      content: 'Hello! I\'m your TrustBridge AI assistant. I can help you with NDPR compliance, data protection questions, and anything about our platform. How can I assist you today?'
+      content: 'Assalamu Alaikum! I\'m your HalalCheck AI assistant. I can help you with Shariah compliance questions, Islamic finance guidance, and anything about our platform. How can I assist you today?'
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
@@ -48,7 +48,7 @@ const AIChatbot = () => {
           messages: [
             {
               role: 'system',
-              content: 'You are TrustBridge AI, an expert assistant for NDPR (Nigerian Data Protection Regulation) compliance and data protection. You help users understand data privacy laws, compliance requirements, and provide guidance on the TrustBridge platform. Be helpful, professional, and concise. Focus on NDPR, data protection, privacy policies, and compliance topics.'
+              content: 'You are HalalCheck AI, an expert assistant for Shariah compliance and Islamic finance. You help users understand Islamic finance principles, halal/haram rulings, and provide guidance on the HalalCheck platform. Be helpful, professional, and concise. Focus on Islamic finance, Shariah compliance, zakat, halal investments, and related topics. Always provide answers based on Islamic principles.'
             },
             {
               role: 'user',
@@ -92,7 +92,7 @@ const AIChatbot = () => {
       <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setIsOpen(true)}
-          className="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200"
+          className="w-14 h-14 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200"
         >
           <MessageCircle className="h-6 w-6" />
         </button>
@@ -106,14 +106,14 @@ const AIChatbot = () => {
         isMinimized ? 'w-80 h-16' : 'w-80 h-96'
       }`}>
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-blue-600 text-white rounded-t-2xl">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-green-600 text-white rounded-t-2xl">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
               <Bot className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="font-bold text-sm">TrustBridge AI</h3>
-              <p className="text-xs opacity-90">NDPR Assistant</p>
+              <h3 className="font-bold text-sm">HalalCheck AI</h3>
+              <p className="text-xs opacity-90">Shariah Assistant</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -142,14 +142,14 @@ const AIChatbot = () => {
                   className={`flex gap-2 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   {message.type === 'bot' && (
-                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <Bot className="h-3 w-3 text-blue-600" />
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <Bot className="h-3 w-3 text-green-600" />
                     </div>
                   )}
                   <div
                     className={`max-w-[70%] p-3 rounded-xl text-sm ${
                       message.type === 'user'
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-green-600 text-white'
                         : 'bg-gray-100 text-gray-900'
                     }`}
                   >
@@ -165,8 +165,8 @@ const AIChatbot = () => {
               
               {isTyping && (
                 <div className="flex gap-2 justify-start">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <Bot className="h-3 w-3 text-blue-600" />
+                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <Bot className="h-3 w-3 text-green-600" />
                   </div>
                   <div className="bg-gray-100 p-3 rounded-xl">
                     <div className="flex space-x-1">
@@ -188,13 +188,13 @@ const AIChatbot = () => {
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Ask about NDPR compliance..."
+                  placeholder="Ask about Shariah compliance..."
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 text-sm"
                 />
                 <button
                   onClick={sendMessage}
                   disabled={!inputMessage.trim() || isTyping}
-                  className="px-3 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-3 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <Send className="h-4 w-4" />
                 </button>

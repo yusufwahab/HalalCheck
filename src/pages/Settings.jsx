@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import { Bell, Shield, User, Globe, Lock, Eye, Save, Check, Building2 } from 'lucide-react';
+import { Bell, Shield, User, Globe, Lock, Eye, Save, Check, Building2, Calculator, Star } from 'lucide-react';
 
 const Settings = () => {
   const [settings, setSettings] = useState({
     notifications: {
-      dataAccess: true,
-      policyUpdates: true,
-      complianceAlerts: true,
+      zakatReminders: true,
+      halalAlerts: true,
+      scholarUpdates: true,
       marketingEmails: false,
       weeklyReports: true,
       whatsappNotifications: true,
       smsNotifications: false,
       emailNotifications: true
     },
-    privacy: {
-      profileVisibility: 'private',
-      dataSharing: false,
-      analyticsTracking: true,
-      cookiePreferences: 'essential'
+    islamic: {
+      madhab: 'hanafi',
+      zakatFrequency: 'annual',
+      prayerReminders: true,
+      halalStrictness: 'moderate'
     },
     security: {
       twoFactorAuth: false,
@@ -25,13 +25,13 @@ const Settings = () => {
       sessionTimeout: '30',
       passwordExpiry: '90'
     },
-    companyPermissions: {
-      'GTBank': 'always_grant',
-      'Paystack': 'always_grant',
-      'Jumia Nigeria': 'always_ask',
-      'Flutterwave': 'always_ask',
-      'Kuda Bank': 'always_ask',
-      'Interswitch': 'always_ask'
+    productPermissions: {
+      'Amana Mutual Funds': 'always_trust',
+      'Wahed Invest': 'always_trust',
+      'Islamic Bank Products': 'always_ask',
+      'Conventional Banks': 'always_review',
+      'Crypto Investments': 'always_review',
+      'Mixed Funds': 'always_review'
     }
   });
 
@@ -47,11 +47,11 @@ const Settings = () => {
     }));
   };
 
-  const handlePrivacyChange = (key, value) => {
+  const handleIslamicChange = (key, value) => {
     setSettings(prev => ({
       ...prev,
-      privacy: {
-        ...prev.privacy,
+      islamic: {
+        ...prev.islamic,
         [key]: value
       }
     }));
@@ -67,12 +67,12 @@ const Settings = () => {
     }));
   };
 
-  const handleCompanyPermissionChange = (company, permission) => {
+  const handleProductPermissionChange = (product, permission) => {
     setSettings(prev => ({
       ...prev,
-      companyPermissions: {
-        ...prev.companyPermissions,
-        [company]: permission
+      productPermissions: {
+        ...prev.productPermissions,
+        [product]: permission
       }
     }));
   };
@@ -84,21 +84,98 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-black text-gray-900 mb-2">
-            <span className="text-blue-600">Settings</span>
+            <span className="text-green-600">Settings</span>
           </h1>
           <p className="text-gray-600">
-            Manage your account preferences and privacy settings
+            Manage your Islamic finance preferences and account settings
           </p>
         </div>
 
         <div className="space-y-8">
+          {/* Islamic Preferences */}
+          <div className="bg-white p-8 rounded-2xl shadow-xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 bg-green-100 rounded-xl">
+                <Star className="h-6 w-6 text-green-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-black text-gray-900">Islamic Preferences</h2>
+                <p className="text-gray-600">Configure your Islamic finance and religious settings</p>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Madhab (School of Thought)
+                </label>
+                <select
+                  value={settings.islamic.madhab}
+                  onChange={(e) => handleIslamicChange('madhab', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option value="hanafi">Hanafi</option>
+                  <option value="maliki">Maliki</option>
+                  <option value="shafi">Shafi'i</option>
+                  <option value="hanbali">Hanbali</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Zakat Calculation Frequency
+                </label>
+                <select
+                  value={settings.islamic.zakatFrequency}
+                  onChange={(e) => handleIslamicChange('zakatFrequency', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option value="annual">Annual (Recommended)</option>
+                  <option value="monthly">Monthly Tracking</option>
+                  <option value="quarterly">Quarterly Review</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Halal Strictness Level
+                </label>
+                <select
+                  value={settings.islamic.halalStrictness}
+                  onChange={(e) => handleIslamicChange('halalStrictness', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option value="strict">Strict (0% tolerance)</option>
+                  <option value="moderate">Moderate (AAOIFI standards)</option>
+                  <option value="lenient">Lenient (5% tolerance)</option>
+                </select>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+                <div>
+                  <h3 className="font-semibold text-gray-900">Prayer Time Reminders</h3>
+                  <p className="text-sm text-gray-600">Get notified for daily prayers</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={settings.islamic.prayerReminders}
+                    onChange={() => handleIslamicChange('prayerReminders', !settings.islamic.prayerReminders)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
           {/* Notification Settings */}
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+          <div className="bg-white p-8 rounded-2xl shadow-xl">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 bg-blue-100 rounded-xl">
                 <Bell className="h-6 w-6 text-blue-600" />
@@ -112,56 +189,56 @@ const Settings = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                 <div>
-                  <h3 className="font-semibold text-gray-900">Data Access Alerts</h3>
-                  <p className="text-sm text-gray-600">Get notified when companies access your data</p>
+                  <h3 className="font-semibold text-gray-900">Zakat Reminders</h3>
+                  <p className="text-sm text-gray-600">Get notified when zakat payments are due</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={settings.notifications.dataAccess}
-                    onChange={() => handleNotificationChange('dataAccess')}
+                    checked={settings.notifications.zakatReminders}
+                    onChange={() => handleNotificationChange('zakatReminders')}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
 
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                 <div>
-                  <h3 className="font-semibold text-gray-900">Policy Updates</h3>
-                  <p className="text-sm text-gray-600">Notifications about privacy policy changes</p>
+                  <h3 className="font-semibold text-gray-900">Halal Alerts</h3>
+                  <p className="text-sm text-gray-600">Notifications about product compliance changes</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={settings.notifications.policyUpdates}
-                    onChange={() => handleNotificationChange('policyUpdates')}
+                    checked={settings.notifications.halalAlerts}
+                    onChange={() => handleNotificationChange('halalAlerts')}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
 
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                 <div>
-                  <h3 className="font-semibold text-gray-900">Compliance Alerts</h3>
-                  <p className="text-sm text-gray-600">Important NDPR compliance notifications</p>
+                  <h3 className="font-semibold text-gray-900">Scholar Updates</h3>
+                  <p className="text-sm text-gray-600">New fatwas and scholarly opinions</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={settings.notifications.complianceAlerts}
-                    onChange={() => handleNotificationChange('complianceAlerts')}
+                    checked={settings.notifications.scholarUpdates}
+                    onChange={() => handleNotificationChange('scholarUpdates')}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
 
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                 <div>
                   <h3 className="font-semibold text-gray-900">Weekly Reports</h3>
-                  <p className="text-sm text-gray-600">Weekly summary of your data activity</p>
+                  <p className="text-sm text-gray-600">Weekly summary of your halal portfolio</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -170,39 +247,7 @@ const Settings = () => {
                     onChange={() => handleNotificationChange('weeklyReports')}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                </label>
-              </div>
-
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div>
-                  <h3 className="font-semibold text-gray-900">WhatsApp Notifications</h3>
-                  <p className="text-sm text-gray-600">Receive notifications via WhatsApp</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.notifications.whatsappNotifications}
-                    onChange={() => handleNotificationChange('whatsappNotifications')}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                </label>
-              </div>
-
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div>
-                  <h3 className="font-semibold text-gray-900">SMS Notifications</h3>
-                  <p className="text-sm text-gray-600">Receive notifications via SMS</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.notifications.smsNotifications}
-                    onChange={() => handleNotificationChange('smsNotifications')}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
 
@@ -218,100 +263,40 @@ const Settings = () => {
                     onChange={() => handleNotificationChange('emailNotifications')}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
             </div>
           </div>
 
-          {/* Privacy Settings */}
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-green-100 rounded-xl">
-                <Shield className="h-6 w-6 text-green-600" />
-              </div>
-              <div>
-                <h2 className="text-xl font-black text-gray-900">Privacy Settings</h2>
-                <p className="text-gray-600">Control how your data is used and shared</p>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Profile Visibility
-                </label>
-                <select
-                  value={settings.privacy.profileVisibility}
-                  onChange={(e) => handlePrivacyChange('profileVisibility', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="public">Public</option>
-                  <option value="private">Private</option>
-                  <option value="contacts">Contacts Only</option>
-                </select>
-              </div>
-
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div>
-                  <h3 className="font-semibold text-gray-900">Data Sharing</h3>
-                  <p className="text-sm text-gray-600">Allow sharing anonymized data for research</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.privacy.dataSharing}
-                    onChange={() => handlePrivacyChange('dataSharing', !settings.privacy.dataSharing)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                </label>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Cookie Preferences
-                </label>
-                <select
-                  value={settings.privacy.cookiePreferences}
-                  onChange={(e) => handlePrivacyChange('cookiePreferences', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="essential">Essential Only</option>
-                  <option value="functional">Essential + Functional</option>
-                  <option value="all">All Cookies</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Company Permissions */}
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+          {/* Product Trust Levels */}
+          <div className="bg-white p-8 rounded-2xl shadow-xl">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 bg-purple-100 rounded-xl">
                 <Building2 className="h-6 w-6 text-purple-600" />
               </div>
               <div>
-                <h2 className="text-xl font-black text-gray-900">Company Permissions</h2>
-                <p className="text-gray-600">Set default permissions for company data requests</p>
+                <h2 className="text-xl font-black text-gray-900">Product Trust Levels</h2>
+                <p className="text-gray-600">Set default trust levels for different product categories</p>
               </div>
             </div>
 
             <div className="space-y-4">
-              {Object.entries(settings.companyPermissions).map(([company, permission]) => (
-                <div key={company} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+              {Object.entries(settings.productPermissions).map(([product, permission]) => (
+                <div key={product} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                   <div>
-                    <h3 className="font-semibold text-gray-900">{company}</h3>
-                    <p className="text-sm text-gray-600">Data access permission</p>
+                    <h3 className="font-semibold text-gray-900">{product}</h3>
+                    <p className="text-sm text-gray-600">Default analysis approach</p>
                   </div>
                   <select
                     value={permission}
-                    onChange={(e) => handleCompanyPermissionChange(company, e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    onChange={(e) => handleProductPermissionChange(product, e.target.value)}
+                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                   >
-                    <option value="always_grant">Always Grant</option>
+                    <option value="always_trust">Always Trust</option>
                     <option value="always_ask">Always Ask</option>
-                    <option value="always_deny">Always Deny</option>
+                    <option value="always_review">Always Review</option>
+                    <option value="never_trust">Never Trust</option>
                   </select>
                 </div>
               ))}
@@ -319,7 +304,7 @@ const Settings = () => {
           </div>
 
           {/* Security Settings */}
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+          <div className="bg-white p-8 rounded-2xl shadow-xl">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 bg-red-100 rounded-xl">
                 <Lock className="h-6 w-6 text-red-600" />
@@ -343,7 +328,7 @@ const Settings = () => {
                     onChange={() => handleSecurityChange('twoFactorAuth', !settings.security.twoFactorAuth)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
 
@@ -354,7 +339,7 @@ const Settings = () => {
                 <select
                   value={settings.security.sessionTimeout}
                   onChange={(e) => handleSecurityChange('sessionTimeout', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="15">15 minutes</option>
                   <option value="30">30 minutes</option>
@@ -375,7 +360,7 @@ const Settings = () => {
                     onChange={() => handleSecurityChange('loginAlerts', !settings.security.loginAlerts)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
             </div>
@@ -388,7 +373,7 @@ const Settings = () => {
               className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold transition-all duration-200 ${
                 saved
                   ? 'bg-green-600 text-white'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                  : 'bg-green-600 text-white hover:bg-green-700'
               }`}
             >
               {saved ? (

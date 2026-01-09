@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Layout from './components/Layout';
@@ -22,8 +22,6 @@ import CitizenRequest from './pages/CitizenRequest';
 import NITDAComplaint from './pages/NITDAComplaint';
 import QuickCompliance from './pages/QuickCompliance';
 import SystemStatus from './pages/SystemStatus';
-import Login from './pages/Login';
-import Register from './pages/Register';
 import ConsentManagement from './pages/ConsentManagement';
 import ActionHistory from './pages/ActionHistory';
 import DataUsageMonitor from './pages/DataUsageMonitor';
@@ -35,21 +33,25 @@ import ConsentHub from './pages/ConsentHub';
 import DataFlowVisualization from './pages/DataFlowVisualization';
 import BreachResponse from './pages/BreachResponse';
 import PrivacyRiskCalculator from './pages/PrivacyRiskCalculator';
-import CrossBorderMonitor from './pages/CrossBorderMonitor';
+import ZakatCalculator from './pages/ZakatCalculator';
+import ProductAnalysis from './pages/ProductAnalysis';
+import HalalScore from './pages/HalalScore';
 import TrackingPage from './pages/TrackingPage';
-import APIService from './services/api';
-import MockAuthService from './services/mockAuth';
 import Notifications from './pages/Notifications';
-import ProtectedRoute from './components/ProtectedRoute';
 import AIChatbot from './components/AIChatbot';
-import TopNavbar from './components/TopNavbar';
 import { NavigationProvider, useNavigation } from './contexts/NavigationContext';
 import { UserProvider } from './contexts/UserContext';
+import ScholarNetwork from './pages/ScholarNetwork';
+import HalalAlternatives from './pages/HalalAlternatives';
+import IncomePurification from './pages/IncomePurification';
+import BusinessDashboard from './pages/BusinessDashboard';
+import QardHasan from './pages/QardHasan';
+import BusinessValidator from './pages/BusinessValidator';
 import NavigationLoader from './components/NavigationLoader';
 
 const ChatbotWrapper = () => {
   const location = useLocation();
-  const excludedPaths = ['/', '/login', '/signup'];
+  const excludedPaths = ['/'];
   
   if (excludedPaths.includes(location.pathname)) {
     return null;
@@ -60,21 +62,14 @@ const ChatbotWrapper = () => {
 
 const AppContent = () => {
   const { isNavigating } = useNavigation();
-  const [user, setUser] = useState(null);
+  const [user] = useState({ name: 'User' }); // Mock user
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(false);
   }, []);
 
-  const handleLogin = (userData) => {
-    setUser(userData);
-  };
-
   const handleLogout = () => {
-    APIService.clearAuthToken();
-    MockAuthService.clearAuthToken();
-    setUser(null);
     setSidebarOpen(false);
   };
   
@@ -100,9 +95,9 @@ const AppContent = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
         </div>
       </div>
@@ -115,36 +110,51 @@ const AppContent = () => {
         {isNavigating && <NavigationLoader />}
         <Routes>
           <Route path="/" element={<Homepage />} />
-          <Route path="/login" element={<Login onLogin={handleLogin} />} />
-          <Route path="/signup" element={!user ? <Register onLogin={handleLogin} /> : <Navigate to="/dashboard" />} />
           
-          {/* Tracking Page Route with Sidebar */}
-          <Route path="/tracking/:trackingId" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <TrackingPage />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          {/* Protected Routes with Sidebar */}
+          {/* Routes with Sidebar */}
           <Route path="/dashboard" element={
-            <ProtectedRoute>
+            <>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
                 <Dashboard user={user} />
               </Layout>
-            </ProtectedRoute>
+            </>
+          } />
+          
+          <Route path="/zakat-calculator" element={
+            <>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <ZakatCalculator />
+              </Layout>
+            </>
+          } />
+          
+          <Route path="/product-analysis" element={
+            <>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <ProductAnalysis />
+              </Layout>
+            </>
+          } />
+          
+          <Route path="/halal-score" element={
+            <>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <HalalScore />
+              </Layout>
+            </>
           } />
           
           <Route path="/notifications" element={
-            <ProtectedRoute>
+            <>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
                 <Notifications />
               </Layout>
-            </ProtectedRoute>
+            </>
           } />
           
           <Route path="/companies" element={
@@ -156,231 +166,94 @@ const AppContent = () => {
             </>
           } />
           
-          <Route path="/data-usage-monitor" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <DataUsageMonitor />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/real-time-data-usage" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <RealTimeDataUsage />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/history" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <History />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
           <Route path="/settings" element={
-            <ProtectedRoute>
+            <>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
                 <Settings />
               </Layout>
-            </ProtectedRoute>
+            </>
           } />
           
           <Route path="/user-profile" element={
-            <ProtectedRoute>
+            <>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
                 <UserProfile />
               </Layout>
-            </ProtectedRoute>
+            </>
           } />
           
-          <Route path="/policy-upload" element={
+          <Route path="/scholar-network" element={
             <>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <PolicyUpload />
+                <ScholarNetwork />
+              </Layout>
+            </>
+          } />
+          
+          <Route path="/halal-alternatives" element={
+            <>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <HalalAlternatives />
+              </Layout>
+            </>
+          } />
+          
+          <Route path="/income-purification" element={
+            <>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <IncomePurification />
+              </Layout>
+            </>
+          } />
+          
+          <Route path="/business-validator" element={
+            <>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <BusinessValidator />
+              </Layout>
+            </>
+          } />
+          
+          <Route path="/business-dashboard" element={
+            <>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <BusinessDashboard />
+              </Layout>
+            </>
+          } />
+          
+          <Route path="/qard-hasan" element={
+            <>
+              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
+              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
+                <QardHasan />
               </Layout>
             </>
           } />
           
           <Route path="/action-history" element={
-            <ProtectedRoute>
+            <>
               <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
               <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
                 <ActionHistory user={user} />
               </Layout>
-            </ProtectedRoute>
+            </>
           } />
 
-          {/* Other existing routes */}
-          <Route path="/register-company" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <RegisterCompany />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/data-connections" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <DataConnections />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/connect-company" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <ConnectCompany />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
+          {/* Standalone routes */}
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/compliance-score" element={<ComplianceScore />} />
           <Route path="/remediation" element={<Remediation />} />
           <Route path="/certificate" element={<Certificate />} />
-          <Route path="/nitda-complaint" element={<NITDAComplaint />} />
-          
-          <Route path="/citizen-request" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <CitizenRequest />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/dsr-management" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <DSRManagement user={user} />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/company/:id" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <CompanyDetail user={user} />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/explore" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <Explore user={user} />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/profile/:companyId" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <CompanyProfile user={user} />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/request/:id" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <RequestDetail user={user} />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/quick-compliance" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <QuickCompliance />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/system-status" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <SystemStatus />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/consent-management" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <ConsentManagement />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/consent-hub" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <ConsentHub />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/data-flow-visualization" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <DataFlowVisualization />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/breach-response" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <BreachResponse />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/privacy-risk-calculator" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <PrivacyRiskCalculator />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/cross-border-monitor" element={
-            <ProtectedRoute>
-              <Sidebar user={user} isOpen={sidebarOpen} onToggle={toggleSidebar} onLogout={handleLogout} />
-              <Layout sidebarOpen={sidebarOpen} fullWidth={true}>
-                <CrossBorderMonitor />
-              </Layout>
-            </ProtectedRoute>
-          } />
         </Routes>
         
-        {/* AI Chatbot - show on protected routes */}
         <ChatbotWrapper />
       </div>
     </Router>
