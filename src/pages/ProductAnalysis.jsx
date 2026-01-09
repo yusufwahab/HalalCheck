@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Upload, FileText, Link as LinkIcon, Zap, AlertTriangle, CheckCircle, BookOpen, Shield, DollarSign, Eye } from 'lucide-react';
+import { Upload, FileText, Link as LinkIcon, Zap, AlertTriangle, CheckCircle, BookOpen, Shield, DollarSign, Eye, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const ProductAnalysis = () => {
